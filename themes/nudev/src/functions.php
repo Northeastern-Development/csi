@@ -284,11 +284,49 @@ function nudevwp_index($length){
   return 20;
 }
 
+function create_post_type_nudev() {
+    register_post_type( 'spotlight',
+        array(
+            'labels' => array(
+                'name' => __( 'Spotlight' ),
+                'singular_name' => __( 'Spotlight' )
+            ),
+            'public' => true,
+            'has_archive' => true,
+            'rewrite' => array('slug' => 'spotlight'),
+        )
+    );
+    register_post_type( 'people',
+        array(
+            'labels' => array(
+                'name' => __( 'People' ),
+                'singular_name' => __( 'People' )
+            ),
+            'public' => true,
+            'has_archive' => true,
+            'rewrite' => array('slug' => 'people'),
+        )
+    );
+    register_post_type( 'opportunities',
+        array(
+            'labels' => array(
+                'name' => __( 'Opportunities' ),
+                'singular_name' => __( 'Opportunities' )
+            ),
+            'public' => true,
+            'has_archive' => true,
+            'rewrite' => array('slug' => 'opportunities'),
+        )
+    );
+}
+
 
 // Create 40 Word Callback for Custom Post Excerpts, call using nudevwp_excerpt('nudevwp_custom_post');
 function nudevwp_custom_post($length){
   return 40;
 }
+
+
 
 // Create the Custom Excerpts callback
 function nudevwp_excerpt($length_callback = '',$more_callback = ''){
@@ -457,7 +495,7 @@ add_action('get_header', 'enable_threaded_comments'); // Enable Threaded Comment
 add_action('wp_head', 'ism_dns_prefetch', 0); // DNS Prefetch Google Fonts
 add_action('wp_enqueue_scripts', 'nudev_conditional_styles'); // Add Theme Stylesheet
 add_action('init', 'register_nudev_menu'); // Add nudev Menu
-// add_action('init', 'create_post_type_nudev'); // Add our nudev Custom Post Type
+add_action('init', 'create_post_type_nudev'); // Add our nudev Custom Post Type
 add_action('widgets_init', 'my_remove_recent_comments_style'); // Remove inline Recent Comment Styles from wp_head()
 add_action('init', 'nudevwp_pagination'); // Add our nudev Pagination
 add_action('init', 'disable_embeds_init', 9999);
