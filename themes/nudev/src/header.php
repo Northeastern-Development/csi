@@ -72,38 +72,48 @@
 
 			<header role="banner"><?php if(function_exists("wp_header")){wp_header();} ?>
 
+                <div>
+                    
+                    <div>
+                    
+                        <nav role="navigation" class="nu__premenu">
+                        
+                            <div id="nu__mainmenu-supernav">
+							     <input id="nu__supernav-toggle" type="checkbox" title="Click to show/hide main menu" />
+							     <label for="nu__supernav-toggle"id="nu__supernav-toggle-label">Menu</label>
+							     <?php if(get_query_var('pagename') != 'main-menu'){ get_template_part('loops/loop-supernav'); } ?>
+                            </div>
+                        
+                        </nav>
 
+					    <div id="nu__logoicon">
+						  <a href="<?=home_url()?>" title="Northeastern University - A University Like No Other"><img src="<?=home_url()?>/wp-content/uploads/logo_icon.png" alt="northeastern university logo" /></a>
+					    </div>
+                        
+                    </div>
+                
+                </div>
 
 				<div>
+                    
+                    <div>
 
-					<nav role="navigation" class="nu__mainmenu">
+					   <nav role="navigation" class="nu__mainmenu">
 
-						<div id="nu__mainmenu-supernav">
-							<input id="nu__supernav-toggle" type="checkbox" title="Click to show/hide main menu" />
-							<label for="nu__supernav-toggle"id="nu__supernav-toggle-label">Menu</label>
-							<?php if(get_query_var('pagename') != 'main-menu'){ get_template_part('loops/loop-supernav'); } ?>
-						</div>
+						  <div id="nu__mainmenu-search">
+							     <input id="nu__search-toggle" type="checkbox" title="Click to search all of Northeastern University" />
+							     <label for="nu__search-toggle" id="nu__search-toggle-label">Search</label>
+							     <?php get_template_part('loops/loop-searchnav'); ?>
+						  </div>
 
-						<div id="nu__mainmenu-search">
-							<input id="nu__search-toggle" type="checkbox" title="Click to search all of Northeastern University" />
-							<label for="nu__search-toggle" id="nu__search-toggle-label">Search</label>
-							<?php get_template_part('loops/loop-searchnav'); ?>
-						</div>
+						  <?php // nudev_nav(); ?>
 
-						<div id="nu__mainmenu-iamnav">
-							<input id="nu__iamnav-toggle" type="checkbox" title="Click to show/hide audience selection menu" />
-							<label for="nu__iamnav-toggle"id="nu__iamnav-toggle-label">I Am A</label>
-							<?php if(get_query_var('pagename') != 'iam-menu'){ get_template_part('loops/loop-iamnav'); } ?>
-						</div>
+					   </nav>
 
-						<?php // nudev_nav(); ?>
-
-					</nav>
-
-					<div id="nu__logo">
-						<a href="<?=home_url()?>" title="Northeastern University - A University Like No Other"><img src="<?=home_url()?>/wp-content/uploads/logo.png" alt="northeastern university logo" />
-						</a>
-					</div>
+					   <div id="nu__logo">
+						  <a href="<?=home_url()?>" title="Northeastern University - A University Like No Other"><img src="<?=home_url()?>/wp-content/uploads/logo.png" alt="northeastern university logo" /></a>
+					   </div>
+                    </div>
 
 				</div>
 
