@@ -18,7 +18,9 @@
 					<?php get_template_part('loops/loop-footercampuses'); ?>
 
 					<div>
-						<p>Connect</p>
+                        <p>Coastal Sustainability Institute</p>
+                        <?php nudev_nav(); ?>
+						<p style="padding-left: 40px;">Connect</p>
 						<ul>
 							<li><a href="//www.facebook.com/northeastern/" title="Friend us on Facebook" target="_blank"><svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><style>.cls-1{}</style></defs><title>Friend us on Facebook</title><circle class="cls-1" cx="256" cy="256" r="256"/><path d="M301.6,151.2h36.3V97H286.5c-29.6,0-68.1,19-68.1,74.2v43H169.3v56.1h49.1v146H277v-146h48.8l8.1-56.1H277V178.5C277,160.1,286,151.2,301.6,151.2Z"/></svg></a></li>
 							<li><a href="//twitter.com/Northeastern" title="Follow us on Twitter" target="_blank"><svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 510.57 510.57"><defs><style>.cls-1{}</style></defs><title>Follow us on Twitter</title><path class="cls-1" d="M255.29,1.43C114.3,1.43,0,115.75,0,256.73S114.3,512,255.29,512,510.57,397.72,510.57,256.73,396.28,1.43,255.29,1.43Zm128.6,203.82c.13,2.76.19,5.53.19,8.33,0,85-64.72,183-183,183a182.12,182.12,0,0,1-98.62-28.89,131.78,131.78,0,0,0,15.34.89,129.07,129.07,0,0,0,79.9-27.53,64.43,64.43,0,0,1-60.09-44.7,62.61,62.61,0,0,0,12.1,1.15,63.61,63.61,0,0,0,17-2.25A64.39,64.39,0,0,1,115,232.22c0-.28,0-.55,0-.83a64.25,64.25,0,0,0,29.15,8.06,64.42,64.42,0,0,1-19.92-85.91,182.61,182.61,0,0,0,132.62,67.21,64.38,64.38,0,0,1,109.62-58.68,128.49,128.49,0,0,0,40.86-15.61A64.52,64.52,0,0,1,379,182.05a128.53,128.53,0,0,0,37-10.13A130.11,130.11,0,0,1,383.89,205.25Z" transform="translate(0 -1.43)"/></svg></a></li>
@@ -27,11 +29,10 @@
 					</div>
 
 					<p>
-						<a href="//www.google.com/maps/place/360+Huntington+Ave,+Boston,+MA+02115/@42.339348,-71.0903674,17z/data=!3m1!4b1!4m5!3m4!1s0x89e37a185b1286ff:0x2c025c6d4b00cba2!8m2!3d42.339348!4d-71.0881734" title="View our Boston campus in Google Maps" target="_blank">360 Huntington Ave., Boston, Massachusetts 02115</a> | <a href="tel:6173732000" title="Give us a call">617.373.2000<a/> | <a href="tel:6173733768" title="TTY">TTY 617.373.3768</a> | <a href="/emergency-information" title="Emergency information">Emergency Information</a><br>&copy; 2018 &nbsp;Northeastern University | <a href="/privacy-information" title="Privacy information">Privacy</a>
-					</p>
+						430 Nahant Road, Nahant, MA 01908. <a href="tel:7815817370" title="Give us a call">781.581.7370</a></p>
 
 				</div>
 			</div>
-		</footer>
+		</footer><?php if(function_exists("wp_globalfooter")){wp_globalfooter();} ?><?php if(function_exists("wp_globalfooter")){wp_globalfooter();} ?><?php if(function_exists("wp_globalfooter")){wp_globalfooter();} ?><?php if(function_exists("wp_globalfooter")){wp_globalfooter();} ?><?php if(function_exists("wp_globalfooter")){wp_globalfooter();} ?><?php if(function_exists("wp_globalfooter")){wp_globalfooter();} ?><?php if(function_exists("wp_globalfooter")){wp_globalfooter();} ?><?php if(function_exists("wp_globalfooter")){wp_globalfooter();} ?><?php if(function_exists("wp_globalfooter")){wp_globalfooter();} ?><?php if(function_exists("wp_globalfooter")){wp_globalfooter();} ?><?php if(function_exists("wp_globalfooter")){wp_globalfooter();} ?><?php if(function_exists("wp_globalfooter")){wp_globalfooter();} ?><?php if(function_exists("wp_globalfooter")){wp_globalfooter();} ?><?php if(function_exists("wp_globalfooter")){wp_globalfooter();} ?>
 	</body>
 </html>
