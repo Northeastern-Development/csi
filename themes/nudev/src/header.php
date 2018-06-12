@@ -66,47 +66,23 @@
 	</head>
 	<body <?php body_class(); ?>>
 
-		<p class="testp" style="position:fixed;background:rgba(0,0,0,0.7);color:#fff;top:200px;left:0;font-weight:bold;font-size:20px;z-index:99999999;"></p>
+		<!--<p class="testp" style="position:fixed;background:rgba(0,0,0,0.7);color:#fff;top:200px;left:0;font-weight:bold;font-size:20px;z-index:99999999;"></p>-->
 
 		<div class="wrapper">
 
-			<header role="banner"><?php if(function_exists("wp_header")){wp_header();} ?>
-
-                <div>
-                    
-                    <div>
-                    
-                        <nav role="navigation" class="nu__premenu">
-                        
-                            <div id="nu__mainmenu-supernav">
-							     <input id="nu__supernav-toggle" type="checkbox" title="Click to show/hide main menu" />
-							     <label for="nu__supernav-toggle"id="nu__supernav-toggle-label">Menu</label>
-							     <?php if(get_query_var('pagename') != 'main-menu'){ get_template_part('loops/loop-supernav'); } ?>
-                            </div>
-                        
-                        </nav>
-
-					    <div id="nu__logoicon">
-						  <a href="<?=home_url()?>" title="Northeastern University - A University Like No Other"><img src="<?=home_url()?>/wp-content/uploads/logo_icon.png" alt="northeastern university logo" /></a>
-					    </div>
-                        
-                    </div>
-                
-                </div>
+			<?php if(function_exists("wp_globalheader")){wp_globalheader();} ?><header role="banner"><?php if(function_exists("wp_header")){wp_header();} ?>
 
 				<div>
                     
                     <div>
 
 					   <nav role="navigation" class="nu__mainmenu">
-
-						  <div id="nu__mainmenu-search">
+						  <?php nudev_nav(); ?>
+						  <!--<div id="nu__mainmenu-search">
 							     <input id="nu__search-toggle" type="checkbox" title="Click to search all of Northeastern University" />
 							     <label for="nu__search-toggle" id="nu__search-toggle-label">Search</label>
 							     <?php get_template_part('loops/loop-searchnav'); ?>
-						  </div>
-
-						  <?php // nudev_nav(); ?>
+						  </div>-->
 
 					   </nav>
 
