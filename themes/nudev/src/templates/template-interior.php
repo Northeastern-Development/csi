@@ -13,6 +13,7 @@
         <div id="nu__pagetitle"><h1><?php echo esc_html( get_the_title() ); ?></h1></div>
         <div class="interior_wrapper">
             <?=get_the_content()?>
+            
         </div>
 	</main>
 
