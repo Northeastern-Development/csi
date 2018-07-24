@@ -293,18 +293,18 @@ function create_post_type_nudev() {
             ),
             'public' => true,
             'has_archive' => true,
-            'rewrite' => array('slug' => 'spotlight'),
+            'rewrite' => array('slug' => 'spotlight')
         )
     );
-    register_post_type( 'people',
+    register_post_type( 'staff',
         array(
             'labels' => array(
-                'name' => __( 'People' ),
-                'singular_name' => __( 'People' )
+                'name' => __( 'Staff' ),
+                'singular_name' => __( 'Staff' )
             ),
             'public' => true,
             'has_archive' => true,
-            'rewrite' => array('slug' => 'people'),
+            'rewrite' => array('slug' => 'staff')
         )
     );
     register_post_type( 'opportunities',
@@ -315,7 +315,7 @@ function create_post_type_nudev() {
             ),
             'public' => true,
             'has_archive' => true,
-            'rewrite' => array('slug' => 'opportunities'),
+            'rewrite' => array('slug' => 'opportunities')
         )
     );
 }
