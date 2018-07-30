@@ -15,7 +15,7 @@
             <div class="nu__hero">
                 <div class="nu__txtbox"><h1>Building knowledge and innovative strategies to create cleaner, safer, smarter coastal communities.</h1><p style="padding-top: 15px;"><a href="" class="nu__button" title="Learn More">Learn More</a></p></div>
                 <article class="nu__imgbox" style="background-color: #777;">
-                    <a href="http://localhost:8888/nucsi/research/" title="Click here now to learn more">Research</a>
+                    <a href="<?php echo get_site_url(); ?>/nucsi/research/" title="Click here now to learn more">Research</a>
                     <div class="nu__panel-content">
                         <div>
                             <p>Exploration that delivers actionable results</p>
@@ -27,7 +27,7 @@
             </div>
             <div class="nu__stories">
                 <article style="background-color: #777;">
-                    <a href="http://localhost:8888/nucsi/partnerships/" title="Click here now to learn more">Partnerships</a>
+                    <a href="<?php echo get_site_url(); ?>/nucsi/partnerships/" title="Click here now to learn more">Partnerships</a>
                     <div class="nu__panel-content">
                         <div>
                             <p>Collaboration among the world's best minds</p>
@@ -37,7 +37,7 @@
                     <div class="gradient"></div>
                 </article>
                 <article style="background-color: #777;">
-                    <a href="http://localhost:8888/nucsi/people/" title="Click here now to learn more">People</a>
+                    <a href="<?php echo get_site_url(); ?>/nucsi/people/" title="Click here now to learn more">People</a>
                     <div class="nu__panel-content">
                         <div>
                             <p>Premier faculty conquering complex coastal threats</p>
@@ -47,7 +47,7 @@
                     <div class="gradient"></div>
                 </article>
                 <article style="background-color: #777;">
-                    <a href="http://localhost:8888/nucsi/resources/" title="Click here now to learn more">Resources</a>
+                    <a href="<?php echo get_site_url(); ?>/nucsi/resources/" title="Click here now to learn more">Resources</a>
                     <div class="nu__panel-content">
                         <div>
                             <p>A state-of-the-art coastal hub near Boston</p>
