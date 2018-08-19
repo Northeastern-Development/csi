@@ -111,6 +111,7 @@ body {
 	font-size:1.6rem;
 	font-weight:300;
 	line-height:2.8rem;
+    overflow: hidden;
 	text-align:left
 }
 
@@ -149,6 +150,8 @@ a.nu__button:hover, a.nu_button:active {
     color: #FFF;
     background-color: rgb(151,151,151);
 }
+
+
 
 input[type="text"],input[type="search"] {
 	font-size:inherit;
@@ -1790,6 +1793,26 @@ p {
 	margin:0 0 30px 0
 }
 
+main#nu__interior .small p, main#nu__interior .small a, body main#nu__homepage div.news .small p, body main#nu__homepage div.news .small a {
+	font-size:1.3rem;
+	font-weight:300;
+	line-height: 2.3rem;
+	text-align:left;
+    color: #000000;
+	margin:0 0 30px 0;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+div.news p {
+    color: #000000;
+}
+
+main#nu__interior div.news .articlecopy p, main#nu__homepage div.news .articlecopy p {
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
 p:last-of-type {
 	margin:0 0 0 0
 }
@@ -1927,6 +1950,17 @@ main {
     padding: 120px 0
 }
 
+.header_wrapper {
+    width: 795px;
+    margin: 0 auto;
+    padding: 30px 0 0 0
+}
+
+#nu__interior .header_wrapper p {
+    color: #FFFFFF;
+    text-align: center
+}
+
 #nu__interior h1 {
     text-align: center;
     font-size: 50px;
@@ -1957,6 +1991,7 @@ main {
     margin-bottom: .5em
 }
 
+
 #nu__interior h2.callout {
     padding: 0 0 0 30px;
     margin: 0 0 40px 0;
@@ -1967,7 +2002,7 @@ main {
 #nu__interior h3 {
     font-size: 24px;
     line-height: 32px;
-    font-weight: 700;
+    font-weight: 300;
     color: #000;
     text-align: left;
     margin: 0;
@@ -1995,6 +2030,15 @@ main {
 #nu__interior a.nu__button:hover, #nu__interior a.nu_button:active {
     color: #000;
     background-color: rgb(151,151,151);
+}
+
+#nu__interior div.news a.nu__button, #nu__homepage div.news a.nu__button {
+    color: #000000;
+    border-color: #000000;
+}
+
+#nu__interior div.news a.nu__button:hover, #nu__interior div.news a.nu__button:active, #nu__homepage div.news a.nu__button:hover, #nu__homepage div.news a.nu__button:active {
+    background-color: #D6D0B7;
 }
 
 
@@ -2196,6 +2240,179 @@ main#nu__interior div.admin {
     display: -ms-flexbox;
     flex-flow: row wrap;
     justify-content: flex-start;
+    padding: 20px 10px 60px 10px;
+}
+
+div.news {
+    width: 100%;
+    height: auto;
+    box-sizing: border-box;
+    padding: 20px 10px 0 10px;
+    display: flex;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+}
+
+div.news article.featured {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: auto;
+    padding: 0 10px;
+    margin-bottom: 1.5vw;
+    display: flex;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+}
+
+div.news article {
+    box-sizing: border-box;
+    width: 33.333%;
+    min-height: auto;
+    padding: 0 10px;
+    margin-bottom: 4vw;
+}
+
+div.news article.featured {
+    width: 100%;
+    min-height: 400px;
+}
+
+div.news article .articleimg {
+    position: relative;
+    box-sizing: border-box;
+    width: 100%;
+    height: 250px;
+    margin-bottom: 15px;
+    background: no-repeat center center; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+
+
+div.news article.featured .articleimg {
+    position: relative;
+    box-sizing: border-box;
+    background-color: #000;
+    width: 50%;
+    height: auto;
+    vertical-align: top;
+    margin-bottom: 0;
+    background: no-repeat center center; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+div.news article.featured .articlecopy {
+    box-sizing: border-box;
+    background-color: #000;
+    width: 50%;
+    vertical-align: top;
+    padding: 30px;
+}
+
+main#nu__interior div.news article.featured .articlecopy p, main#nu__interior div.news article.featured .articlecopy a, div.news article.featured .articlecopy p, div.news article.featured .articlecopy a {
+    color: #FFFFFF;
+}
+
+div.news article a.arrow {
+    background: url(../img/icon_arrow.svg) no-repeat left center;
+    background-size: 16px;
+    padding-left: 25px;
+    text-decoration: none;
+    border-bottom: 0;
+}
+
+div.news article.featured a.arrow {
+    background: url(../img/icon_arrow_white.svg) no-repeat left center;
+}
+
+div.news article .article_tag {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    display: inline-block;
+    font-size: 12px;
+    background-color: rgba(255, 255,255, 0.6);
+    padding: 5px 10px;
+    text-transform: uppercase;
+    color: #000000;
+    font-weight: 700;
+}
+
+.nu__callouts {
+    background-color: rgba(0,0,0,0.8);
+    margin: 50px auto 50px auto;
+    padding: 40px 0;
+    text-align: center;
+}
+
+.education {
+    background-color: transparent;
+    margin: 0 auto 60px auto;
+    padding: 0;
+    text-align: center;
+}
+
+#nu__interior .education h2 {
+    font-size: 5.5rem;
+    line-height: 48px;
+    font-weight: 300;
+    color: #000;
+    text-align: left;
+    padding-bottom: .5em;
+    margin-bottom: .5em;
+    text-align: center;
+    color: #C00;
+}
+
+.nu__callouts>.nu__inner-wrap div {
+    text-align: center;
+    width: 90vw;
+    margin: 0 auto;
+    position: relative;
+    box-sizing: border-box;
+    padding-top: 15px;
+    display: flex;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    flex-flow: row wrap;
+    justify-content: space-between;
+}
+
+.nu__callouts>.nu__inner-wrap div>div {
+	position:relative;
+	display:block;
+    box-sizing: border-box;
+    width: 26vw;
+    text-align: center;
+}
+
+.nu__callouts h1 {
+    width: 98vw;
+    border-bottom: 1px solid #656565;
+    margin: 0 auto;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+#nu__interior .nu__callouts h1.edu {
+    color: #000000;
+    font-size: 4.5rem;
+    padding-bottom: 25px;
+}
+
+.nu__callouts>.nu__inner-wrap div>div h2, div.nu__callouts>.nu__inner-wrap div>div p {
+    text-align: center;
+    width: 100%;
 }
 
 main#nu__interior div.admin:after {
@@ -2206,11 +2423,16 @@ main#nu__interior div.admin:after {
 main#nu__interior div.admin .thumb {
 	position:relative;
     box-sizing: border-box;
-    width: 24vw;
+    width: 16vw;
     vertical-align: top;
     margin-bottom: 1.5vw;
-    padding-bottom: 0;
-    padding-right: 20px;
+    padding: 0 10px 0 10px;
+}
+
+main#nu__interior div.admin .thumb img {
+    width: 100%;
+    height: auto;
+    display: block;
 }
 
 .phone {
@@ -2223,4 +2445,39 @@ main#nu__interior div.admin .thumb {
     background: url(../img/icon_email.svg) no-repeat left center;
     background-size: 20px;
     padding-left: 30px;
+}
+
+#nu__interior .staffnav {
+    width: 100%;
+    margin: 50px auto 0 auto;
+    text-align: center;
+}
+
+#nu__interior #nu__staffnav {
+    display: inline-block;
+    list-style-type: none;
+    border-bottom: 1px solid #000000;
+    text-align: center;
+    padding: 0;
+}
+
+#nu__interior #nu__staffnav li {
+    display: inline;
+    text-align: center;
+}
+
+#nu__interior #nu__staffnav li a {
+    display: inline-block;
+    box-sizing: border-box;
+    text-transform: uppercase;
+    font-size: 13px;
+    padding: 5px 15px 13px 15px;
+    text-decoration: none;
+    border-bottom: 3px solid #FFF;
+}
+
+#nu__interior #nu__staffnav li a:hover, #nu__interior #nu__staffnav li a:active, #nu__interior #nu__staffnav.all li:nth-child(1) a, #nu__interior #nu__staffnav.faculty li:nth-child(2) a, #nu__interior #nu__staffnav.affiliated_faculty li:nth-child(3) a, #nu__interior #nu__staffnav.emeritus_faculty li:nth-child(4) a, #nu__interior #nu__staffnav.ogl_staff li:nth-child(5) a, #nu__interior #nu__staffnav.research_staff li:nth-child(6) a, #nu__interior #nu__staffnav.graduate_students li:nth-child(7) a {
+    font-weight: 700;
+    color: #000;
+    border-bottom: 3px solid #C00;
 }

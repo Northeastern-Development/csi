@@ -14,7 +14,7 @@ global $wp;
         <div class="interior_wrapper">
             <div class="nu__breadcrumb">
                 
-                <a href="<?php echo get_site_url() ?>" title="Coastal Sustainability Institute">Coastal Sustainability Institute</a> &gt; <a href="<?php echo get_site_url() . '/' . get_field('type'); ?>" title="<?php echo ucfirst(get_field('type')); ?>"><?php echo ucfirst(get_field('type')); ?></a> &gt; <?php the_title(); ?>
+                <a href="<?php echo get_site_url() ?>" title="Coastal Sustainability Institute">Coastal Sustainability Institute</a> &gt; <?php if(get_field('type') == "") { ?><a href="<?php echo get_site_url() . '/news' ?>" title="News Archive">News Archive</a><?php } else { ?><a href="<?php echo get_site_url() . '/' . get_field('type'); ?>" title="<?php echo ucfirst(get_field('type')); ?>"><?php echo ucfirst(get_field('type')); ?></a><?php } ?> &gt; <?php the_title(); ?>
             </div>
             <h2 style="border-bottom: 0;"><?php the_title(); ?></h2>
             <?php $image = get_field('image'); ?>
