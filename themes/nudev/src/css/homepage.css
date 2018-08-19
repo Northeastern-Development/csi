@@ -82,8 +82,6 @@ html {
 }
 
 body.home {
-	height:100%;
-	min-height:100%
 }
 
 main#nu__homepage {
@@ -269,37 +267,3 @@ main#nu__homepage div.nu__quote p {
     padding-top: 15px;
 }
 
-main#nu__homepage div.nu__callouts {
-    background-color: rgba(0,0,0,0.8);
-    margin: 50px auto 50px auto;
-    padding: 20px 0;
-    text-align: center;
-}
-
-main#nu__homepage div.nu__callouts>.nu__inner-wrap div {
-    text-align: center;
-    width: 60vw;
-    margin: 0 auto;
-    position: relative;
-    box-sizing: border-box;
-    padding-top: 5px;
-    display: flex;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    flex-flow: row wrap;
-    justify-content: space-between;
-}
-
-main#nu__homepage div.nu__callouts>.nu__inner-wrap div>div {
-	position:relative;
-	min-height:200px;
-	display:block;
-    box-sizing: border-box;
-    width: 13vw;
-    text-align: center;
-}
-
-main#nu__homepage div.nu__callouts>.nu__inner-wrap div>div h2, main#nu__homepage div.nu__callouts>.nu__inner-wrap div>div p {
-    text-align: center;
-    width: 100%;
-}
