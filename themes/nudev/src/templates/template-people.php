@@ -1,33 +1,30 @@
 <?php
-
 	/* Template Name: People */
 
-
-	get_header();
+    get_header();
     global $wp;
     $current_url = home_url( add_query_arg( array(), $wp->request ) );
-    if (isset($_GET['stid']) && is_numeric($_GET['stid'])) {
-        $stid = $_GET['stid'];
-    } else {
+    $stid = $wp_query->query_vars['stid'];
+    if (!isset($stid)) {
         $stid = 'All';
     }
     switch($stid) {
-        case "1":
+        case "faculty":
             $stid = "Faculty";
             break;
-        case "2":
+        case "affiliated-faculty":
             $stid = "Affiliated Faculty";
             break;
-        case "3":
+        case "emeritus-faculty":
             $stid = "Emeritus Faculty";
             break;
-        case "4":
+        case "ogl-staff":
             $stid = "OGL Staff";
             break;
-        case "5":
+        case "research-staff":
             $stid = "Research Staff";
             break;
-        case "6":
+        case "graduate-students":
             $stid = "Graduate Students";
             break;
         default:
@@ -41,13 +38,13 @@
         </div>
         <div class="staffnav">
             <ul id="nu__staffnav" class="<?php echo(strtolower(str_replace(' ', '_', $stid))); ?>">
-                <li><a href="<?php echo $current_url; ?>" title="All">All</a></li>
-                <li><a href="<?php echo $current_url . '?stid=1' ?>" title="Faculty">Faculty</a></li>
-                <li><a href="<?php echo $current_url . '?stid=2' ?>" title="Affiliated Faculty">Affiliated Faculty</a></li>
-                <li><a href="<?php echo $current_url . '?stid=3' ?>" title="Emeritus Faculty">Emeritus Faculty</a></li>
-                <li><a href="<?php echo $current_url . '?stid=4' ?>" title="OGL Staff">OGL Staff</a></li>
-                <li><a href="<?php echo $current_url . '?stid=5' ?>" title="Research Staff">Research Staff</a></li>
-                <li><a href="<?php echo $current_url . '?stid=6' ?>" title="Graduate Students">Graduate Students</a></li>
+                <li><a href="<?php echo get_site_url(); ?>/people/" title="All">All</a></li>
+                <li><a href="<?php echo get_site_url(); ?>/people/faculty/" title="Faculty">Faculty</a></li>
+                <li><a href="<?php echo get_site_url(); ?>/people/affiliated-faculty/" title="Affiliated Faculty">Affiliated Faculty</a></li>
+                <li><a href="<?php echo get_site_url(); ?>/people/emeritus-faculty/" title="Emeritus Faculty">Emeritus Faculty</a></li>
+                <li><a href="<?php echo get_site_url(); ?>/people/ogl-staff/" title="OGL Staff">OGL Staff</a></li>
+                <li><a href="<?php echo get_site_url(); ?>/people/research-staff/" title="Research Staff">Research Staff</a></li>
+                <li><a href="<?php echo get_site_url(); ?>/people/graduate-students/" title="Graduate Students">Graduate Students</a></li>
             </ul>
         </div>
         

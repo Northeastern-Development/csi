@@ -6,6 +6,7 @@
 
 
 	get_header();
+$pagename = get_query_var('pagename');
 
 ?>
 
@@ -36,7 +37,8 @@
 		      setup_postdata( $post );
             ?>
             <article style="background-color: #777;"<?php if($count < 2) echo " class='nu__hero'"; ?>>
-                    <a href="<?php the_permalink(); ?>" title="Click here now to learn more"><?php the_title(); ?></a>
+                    <?php $plink = get_permalink(); $tlink = str_replace("spotlight", $pagename, $plink)?>
+                    <a href="<?php echo $tlink; ?>" title="Click here now to learn more"><?php the_title(); ?></a>
                     <div class="nu__panel-content">
                         <div>
                             <h2><span><?php the_title(); ?></span></h2>
