@@ -7,7 +7,6 @@
 
 	get_header();
 global $wp;
-
 ?>
 
 	<main id="nu__interior" role="main" aria-label="content" class="smooth">

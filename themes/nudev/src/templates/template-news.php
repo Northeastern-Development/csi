@@ -48,28 +48,32 @@
             ?>
             <?php if($count == 0) { ?>
             <article class="featured">
+                    <a href="<?php the_permalink(); ?>" class="linkcover" title="Read More"></a>
                     <?php $image = get_field('image'); ?>
                     <div class="articleimg" style="background-image: url(<?php echo $image['url'] ?>);">
                         <div class="article_tag"><?php echo get_field('tag_label') ?></div>
+                        <div class="darkcover"></div>
                     </div>
                     
                     <div class="articlecopy">
                         <p style="margin-bottom: 12px;"><strong><?php the_title(); ?><br />by <?php echo get_field('author_name'); ?></strong></p>
                         <div class="small" style="margin-bottom: 5px;"><?php echo truncate(get_field('content')); ?></div>
-                        <div class="small"><a href="<?php the_permalink(); ?>" class="arrow" title="Click here now to learn more">Read More</a></div>
+                        <div class="small"><a href="<?php the_permalink(); ?>" class="arrow" title="Read More">Read More</a></div>
                     </div>
                 </article>
             <?php } else { ?>
                 <article>
+                    <a href="<?php the_permalink(); ?>" class="linkcover" title="Read More"></a>
                     <?php $image = get_field('image'); ?>
                     <div class="articleimg" style="background-image: url(<?php echo $image['url'] ?>);">
                         <div class="article_tag"><?php echo get_field('tag_label') ?></div>
+                        <div class="darkcover"></div>
                     </div>
                     
                     <div class="articlecopy">
                         <p style="margin-bottom: 5px;"><strong><?php the_title(); ?><br />by <?php echo get_field('author_name'); ?></strong></p>
                         <div class="small" style="margin-bottom: 5px;"><?php echo truncate(get_field('content'), 100); ?></div>
-                        <div class="small"><a href="<?php the_permalink(); ?>" class="arrow" title="Click here now to learn more">Read More</a></div>
+                        <div class="small"><a href="<?php the_permalink(); ?>" class="arrow" title="Read More">Read More</a></div>
                     </div>
                 </article>
             <?php } ?>
@@ -102,15 +106,17 @@
 		      setup_postdata( $post );
             ?>
                 <article>
+                    <a href="<?php the_permalink(); ?>" class="linkcover" title="Read More"></a>
                     <?php $image = get_field('image'); ?>
                     <div class="articleimg" style="background-image: url(<?php echo $image['url'] ?>);">
                         <div class="article_tag"><?php echo get_field('tag_label') ?></div>
+                        <div class="darkcover"></div>
                     </div>
                     
                     <div class="articlecopy">
                         <p style="margin-bottom: 5px;"><strong><?php the_title(); ?><br />by <?php echo get_field('author_name'); ?></strong></p>
                         <div class="small" style="margin-bottom: 5px;"><?php echo truncate(get_field('content'), 100); ?></div>
-                        <div class="small"><a href="<?php the_permalink(); ?>" class="arrow" title="Click here now to learn more">Read More</a></div>
+                        <div class="small"><a href="<?php the_permalink(); ?>" class="arrow" title="Read More">Read More</a></div>
                     </div>
                 </article>
 	        <?php endforeach; ?>
