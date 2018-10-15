@@ -23,6 +23,52 @@ Load External Files
 // $windowSize = $_SESSION['windowsize'];
 
 
+/*$args = array(
+    // your other arguments
+    'rewrite' => array( 
+        'slug' => 'education', // use this slug instead of post type name
+        'with_front' => FALSE // if you have a permalink base such as /blog/ then setting this to false ensures your custom post type permalink structure will be /products/ instead of /blog/products/
+    ),
+);
+
+register_post_type( 'spotlight', $args );*/
+
+/*add_action( 'init', 'pmg_rewrite_add_rewrites' );
+function pmg_rewrite_add_rewrites()
+{    
+    add_rewrite_endpoint( 'people', EP_PERMALINK );
+}
+
+add_action( 'template_redirect', 'pmg_rewrite_catch_form' );
+function pmg_rewrite_catch_form()
+{
+    if( is_singular() && get_query_var( 'people' ) )
+    {
+        exit();
+    }
+}
+
+add_filter( 'request', 'pmg_rewrite_filter_request' );
+function pmg_rewrite_filter_request( $vars )
+{
+    if( isset( $vars['people'] ) ) $vars['people'] = true;
+    return $vars;
+}*/
+
+
+/*include('add_rewrite_rules.php');
+$options3 = array(
+    'query_vars' => array('var1, var2, var3, var4, var5'),
+    'rules' => 
+        array(
+            '(.+?)/([^/]+)/([^/]+)/?$' => 'index.php?pagename=$matches[1]&var1=$matches[2]'
+        )
+);
+
+$rewrite = new Add_rewrite_rules($options3);
+add_action('wp_head', array(&$rewrite, 'flush_rules'));
+add_action( 'generate_rewrite_rules', array(&$rewrite, 'add_rewrite_rules') );
+add_filter( 'query_vars', array(&$rewrite, 'add_query_vars') );*/
 
 /**
  * Responsive Image Helper Function
@@ -283,6 +329,54 @@ function nudevwp_pagination(){
 function nudevwp_index($length){
   return 20;
 }
+
+/*function change_post_name_on_save($post_ID, $post, $update ) {
+    global $wpdb;
+
+    $post = get_post( $post_ID );
+    $cf_post_name = wp_unique_post_slug( sanitize_title(get_post_field('acf-field_5b0edfe06a29f', $post_ID), $post->post_name ), $post_name, $post->post_status, $post->post_type, $post->post_parent );
+
+    if ( ! in_array( $post->post_status, array( 'publish', 'trash' ) ) ) {
+        // no changes for post that is already published or trashed
+        $wpdb->update( $wpdb->posts, array( 'post_name' => $cf_post_name ), array( 'ID' => $post_ID ) );
+        clean_post_cache( $post_ID );
+    } elseif ( 'publish' == $post->post_status ) {
+        if ( $post->ID == $post->post_name ) {
+            // it was published just now
+            $wpdb->update( $wpdb->posts, array( 'post_name' => $cf_post_name ), array( 'ID' => $post_ID ) );
+            clean_post_cache( $post_ID );
+        }
+    }
+}
+add_action( 'save_post', 'change_post_name_on_save', 20, 3 );*/
+
+
+// Custom Rewrite Rule for Staff pages
+function custom_rewrite_tag() {
+  add_rewrite_tag('%stid%', '([^&]+)');
+}
+add_action('init', 'custom_rewrite_tag', 10, 0);
+
+function custom_rewrite_rule() {
+    add_rewrite_rule('^people/([^/]*)/?','index.php?page_id=167&stid=$matches[1]','top');
+}
+add_action('init', 'custom_rewrite_rule', 10, 0);
+
+function custom_rewrite_rule2() {
+    add_rewrite_rule('^partnerships/([^/]*)/?','index.php?post_type=spotlight&p=$matches[1]','top');
+}
+add_action('init', 'custom_rewrite_rule2', 10, 0);
+
+function custom_rewrite_rule3() {
+    add_rewrite_rule('^research/([^/]*)/?','index.php?post_type=spotlight&p=$matches[1]','top');
+}
+add_action('init', 'custom_rewrite_rule3', 10, 0);
+
+function custom_rewrite_rule4() {
+    add_rewrite_rule('^education/([^/]*)/?','index.php?post_type=spotlight&p=$matches[1]','top');
+}
+add_action('init', 'custom_rewrite_rule4', 10, 0);
+
 
 function create_post_type_nudev() {
     register_post_type( 'spotlight',
