@@ -1794,7 +1794,7 @@ p {
 	margin:0 0 30px 0
 }
 
-main#nu__interior .small p, .small a, body main#nu__homepage div.news .small p, body main#nu__homepage div.news .small a {
+main#nu__interior .small p, .small a, body main#nu__homepage div.news .small p {
 	font-size:1.3rem;
 	font-weight:300;
 	line-height: 2.3rem;
