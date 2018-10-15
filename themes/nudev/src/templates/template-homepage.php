@@ -98,9 +98,11 @@
 		              setup_postdata( $post );
                     ?>
                     <article style="margin-bottom: 30px;">
+                        <a href="<?php the_permalink(); ?>" class="linkcover" title="Read More"></a>
                         <?php $image = get_field('image'); ?>
                         <div class="articleimg" style="background-image: url(<?php echo $image['url'] ?>);">
                             <div class="article_tag"><?php echo get_field('tag_label') ?></div>
+                            <div class="darkcover"></div>
                         </div>
                     
                         <div class="articlecopy">
