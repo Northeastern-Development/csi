@@ -1,4 +1,5 @@
 <?php
+if ( !defined( 'ABSPATH' ) ) die( 'No direct access.' );
 /**
  * Easy Updates Manager Logs List Table class.
  *
@@ -8,8 +9,11 @@
  * @access private
  */
 class MPSUM_Logs_List_Table extends MPSUM_List_Table {
-	
+	private $tab = '';
+	private $action_type = '';
+	private $type = '';
 	private $url = '';
+	private $month = '0';
 
 	/**
 	 * Constructor.
@@ -25,19 +29,42 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 	 * @param array $args An associative array of arguments.
 	 */
 	public function __construct( $args = array() ) {
+		global $status, $page;
 
 		parent::__construct( array(
 			'singular'=> 'log',			
 			'plural' => 'logs',
+			'screen' => isset( $args['screen'] ) ? $args['screen'] : null,
+			'ajax' => true
         ) );
         
-        $this->url = add_query_arg( array( 'tab' => 'logs' ), MPSUM_Admin::get_url() );
+		$this->tab = isset( $args['tab'] ) ? $args['tab'] : '';
+		$this->action_type = isset( $_REQUEST['action_type'] ) ? $_REQUEST['action_type'] : 'all';
+		$this->type = isset( $_REQUEST['type'] ) ? $_REQUEST['type'] : 'all';
+		if ( isset( $_REQUEST['m'] ) && strlen( $_REQUEST['m'] ) > 4 ) {
+		    $this->month = $_REQUEST['m'];
+		}
+
+		$this->url = add_query_arg( array( 'tab' => 'logs' ), MPSUM_Admin::get_url() );
+
+		$status = 'all';
+		if ( isset( $_REQUEST['status'] ) && in_array( $_REQUEST['status'], array( 'all', '1', '0' ) ) ) {
+			$status = $_REQUEST['status'];
+		}
+
+		$page = $this->get_pagenum();
 	}
 
+	/**
+	 * Prepare items
+	 *
+	 * @return void
+	 */
 	public function prepare_items() {
-		global $wpdb, $_wp_column_headers;
+		global $wpdb, $_wp_column_headers, $status;
 		$screen = get_current_screen();
         $tablename = $wpdb->base_prefix . 'eum_logs';
+	    $page = $this->get_pagenum();
         
         // Get logs per page
 		$user_id = get_current_user_id();
@@ -46,45 +73,42 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 			$per_page = 100;
 		}
         
-		$log_count = $wpdb->get_var( "select count( * ) from $tablename" );
-		
-		$paged = isset( $_GET[ 'paged' ] ) ? absint( $_GET[ 'paged' ] ) : 0;
-		if ( 1 == $paged || 0 == $paged ) {
-    		$offset = 0;
-		} else {
-    		$offset = ( $paged -1 ) * $per_page;
-		}
-		
-		$month = isset( $_GET[ 'm' ] ) ? absint( $_GET[ 'm' ] ) : 0;
-		
+
+		$offset = ( $page -1 ) * $per_page;
+
 		$where = '';
-		if ( isset( $_GET[ 'm' ] ) && strlen( $_GET[ 'm' ] ) > 4 ) {
-			$where .= " AND YEAR($tablename.date)=" . substr($month, 0, 4);
-			if ( strlen( $month ) > 5 ) {
-				$where .= " AND MONTH($tablename.date)=" . substr( $month, 4, 2 );
+		if ( isset( $this->month ) && strlen( $this->month ) > 4 ) {
+			$where .= " AND YEAR($tablename.date)=" . substr($this->month, 0, 4);
+			if ( strlen( $this->month ) > 5 ) {
+				$where .= " AND MONTH($tablename.date)=" . substr( $this->month, 4, 2 );
 			}
 		}
-		if ( isset( $_GET[ 'status' ] ) && 'all' !== $_GET[ 'status' ] ) {
-			$where .= $wpdb->prepare( " and $tablename.status = %d ", absint( $_GET[ 'status' ] ) );
+
+		if ( isset( $status ) && 'all' !== $status ) {
+			$where .= $wpdb->prepare( " and $tablename.status = %d ", absint( $status ) );
 		}
 		
-		if ( isset( $_GET[ 'action' ] ) && 'all' !== $_GET[ 'action' ] ) {
-			$where .= $wpdb->prepare( " and $tablename.action = %s ", sanitize_text_field( $_GET[ 'action' ] ) );
+		if ( isset( $this->action_type ) && 'all' !== $this->action_type ) {
+			$where .= $wpdb->prepare( " and $tablename.action = %s ", sanitize_text_field( $this->action_type ) );
 		}
 		
-		if ( isset( $_GET[ 'type' ] ) && 'all' !== $_GET[ 'type' ] ) {
-			$where .= $wpdb->prepare( " and $tablename.type = %s ", sanitize_text_field( $_GET[ 'type' ] ) );
+		if ( isset( $this->type ) && 'all' !== $this->type ) {
+			$where .= $wpdb->prepare( " and $tablename.type = %s ", sanitize_text_field( $this->type ) );
 		}
 		
 		$select = "select log_id, user_id, name, type, version_from, version, action, status, date from $tablename WHERE 1=1";
 		$orderby = " order by log_id DESC";
 		$limit = " limit %d,%d";
+
+		// Calculate no. of logs separately, because filters may be on
+		$query = $select . $where . $orderby;
+		$wpdb->get_results( $query );
+		$log_count = $wpdb->num_rows;
+
 		$query = $select . $where . $orderby . $limit;
-		
 		$query = $wpdb->prepare( $query, $offset, $per_page );
-		
 		$this->items = $wpdb->get_results( $query );
-		
+
 		/* -- Register the Columns -- */
 		$this->_column_headers = array( 
 			$this->get_columns(),		// columns
@@ -94,7 +118,12 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 
 		$this->set_pagination_args( array(
 			'total_items' => $log_count,
-			'per_page' => $per_page
+			'per_page' => $per_page,
+			'total_pages'	=> ceil( $log_count / $per_page ),
+			'status' => $status,
+			'tab' => isset($this->tab) ? $this->tab : '',
+			'action_type' => isset($this->action_type) ? $this->action_type: 'all',
+			'type' => isset($this->type) ? $this->type: 'all',
 		) );
 	}
 	
@@ -103,10 +132,8 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 	 *
 	 * @since 6.0.0
 	 * @access protected
-	 *
 	 * @global wpdb      $wpdb
-	 *
-	 * @param string $post_type
+	 * @param string $post_type Post type
 	 */
 	protected function months_dropdown( $post_type ) {
 		global $wpdb, $wp_locale;
@@ -144,6 +171,11 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 <?php
 	}
 	
+	/**
+	 * Type dropdown
+	 *
+	 * @return void
+	 */
 	private function type_dropdown() {
 		$type = isset( $_GET['type'] ) ? sanitize_text_field( $_GET['type'] ) : 'all';
 		?>
@@ -158,6 +190,11 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 		<?php
 	}
 	
+	/**
+	 * Status dropdown
+	 *
+	 * @return void
+	 */
 	private function status_dropdown() {
 		$status = isset( $_GET['status'] ) ? sanitize_text_field( $_GET['status'] ) : 'all';
 		?>
@@ -170,11 +207,16 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 		<?php
 	}
 	
+	/**
+	 * Action dropdown
+	 *
+	 * @return void
+	 */
 	private function action_dropdown() {
-		$action = isset( $_GET['action'] ) ? sanitize_text_field( $_GET['action'] ) : 'all';
+		$action = isset( $_GET['action_type'] ) ? sanitize_text_field( $_GET['action_type'] ) : 'all';
 		?>
 		<label for="filter-by-action" class="screen-reader-text"><?php _e( 'Filter by Action', 'stops-core-theme-and-plugin-updates' ); ?></label>
-		<select name="action" id="filter-by-action">
+		<select name="action_type" id="filter-by-action">
 			<option<?php selected( $action, 'all' ); ?> value="all"><?php _e( 'All Actions', 'stops-core-theme-and-plugin-updates' ); ?></option>
 			<option<?php selected( $action, 'automatic' ); ?> value="automatic"><?php echo _x( 'Automatic Updates', 'Show log items that are automatic updates only', 'stops-core-theme-and-plugin-updates' ); ?></option>
 			<option<?php selected( $action, 'manual' ); ?> value="manual"><?php echo _x( 'Manual Updates', 'Show log items that are manual updates only', 'stops-core-theme-and-plugin-updates' ); ?></option>
@@ -183,8 +225,10 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 	}
 	
 	/**
+	 * Extra table nav
+	 *
 	 * @global int $cat
-	 * @param string $which
+	 * @param string $which Specify which table
 	 */
 	protected function extra_tablenav( $which ) {
 		global $cat;
@@ -219,6 +263,7 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 	}
 
 	/**
+	 * Get table classes
 	 *
 	 * @return array
 	 */
@@ -227,6 +272,7 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 	}
 
 	/**
+	 * Get columns
 	 *
 	 * @return array
 	 */
@@ -246,10 +292,12 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 	}
 
 	/**
+	 * Display rows
+	 *
 	 * @global WP_Query $wp_query
 	 * @global int $per_page
-	 * @param array $posts
-	 * @param int $level
+	 * @param array $posts posts to be displayed
+	 * @param int   $level Row level
 	 */
 	public function display_rows( $posts = array(), $level = 0 ) {
 		$records = $this->items;
@@ -260,8 +308,10 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
 	}
 
 	/**
+	 * Single row
 	 *
-	 * @param array log record
+	 * @param array $record log record
+	 * @return void
 	 */
 	public function single_row( $record ) {
 		
@@ -334,5 +384,57 @@ class MPSUM_Logs_List_Table extends MPSUM_List_Table {
             ?>
 		</tr>
 	<?php
+	}
+
+	/**
+	 * Captures response content of ajax call and returns it
+	 */
+	public function ajax_response() {
+
+		$this->prepare_items();
+		extract( $this->_args );
+		extract( $this->_pagination_args, EXTR_SKIP );
+
+		ob_start();
+		$this->views();
+		$views = ob_get_clean();
+
+		ob_start();
+		if ( !empty( $_REQUEST['no_placeholder'] ) ) {
+			$this->display_rows();
+		} else {
+			$this->display_rows_or_placeholder();
+		}
+		$rows = ob_get_clean();
+
+		// We don't have to update column header, but may be needed later, if sorting is introduced
+		ob_start();
+		$this->print_column_headers();
+		$headers = ob_get_clean();
+
+		ob_start();
+		$this->pagination( 'top' );
+		$pagination_top = ob_get_clean();
+
+		ob_start();
+		$this->pagination( 'bottom' );
+		$pagination_bottom = ob_get_clean();
+
+		$response['views'] = array( $views );
+		$response['rows'] = array( $rows );
+		$response['pagination']['top'] = $pagination_top;
+		$response['pagination']['bottom'] = $pagination_bottom;
+		$response['headers'] = $headers;
+
+		if ( isset( $total_items ) ) {
+			$response['total_items_i18n'] = sprintf( _n( '1 plugin', '%s plugins', $total_items ), number_format_i18n( $total_items ) );
+		}
+
+		if ( isset( $total_pages ) ) {
+			$response['total_pages'] = $total_pages;
+			$response['total_pages_i18n'] = number_format_i18n( $total_pages );
+		}
+
+		wp_send_json( $response );
 	}
 }

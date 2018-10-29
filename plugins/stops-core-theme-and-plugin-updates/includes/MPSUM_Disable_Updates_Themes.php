@@ -2,15 +2,18 @@
 /**
  * Disables all WordPress theme updates.
  *
- * Disables all WordPress theme updates.
- *
- * @since 5.0.0
- *
  * @package WordPress
+ * @since   5.0.0
  */
-//Credit - From https://wordpress.org/plugins/disable-wordpress-updates/
+
+/**
+ * Disable theme updates
+ * Credit - From https://wordpress.org/plugins/disable-wordpress-updates/
+ */
 class MPSUM_Disable_Updates_Themes {
-	
+	/**
+	 * Constructor
+	 */
 	public function __construct() {
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
 		
@@ -20,10 +23,6 @@ class MPSUM_Disable_Updates_Themes {
 		 * 2.8 to 3.0
 		 */
 		add_filter( 'pre_transient_update_themes', array( $this, 'last_checked_now' ) );
-		/*
-		 * 3.0
-		 */
-		add_filter( 'pre_site_transient_update_themes', array( $this, 'last_checked_now' ) );
 		
 		/*
 		 * Disable All Automatic Updates
@@ -38,11 +37,10 @@ class MPSUM_Disable_Updates_Themes {
 	/**
 	 * Initialize and load the plugin stuff
 	 *
-	 * @since 		1.3
-	 * @author 		scripts@schloebe.de
+	 * @since  1.3
+	 * @author scripts@schloebe.de
 	 */
 	function admin_init() {
-	
 		/*
 		 * Disable Theme Updates
 		 * 2.8 to 3.0
@@ -61,6 +59,13 @@ class MPSUM_Disable_Updates_Themes {
 		
 	}
 	
+	/**
+	 * Last checked theme updates
+	 *
+	 * @param array $transient transient options
+	 * 
+	 * @return object
+	 */
 	public function last_checked_now( $transient ) {
 		include ABSPATH . WPINC . '/version.php';
 		$current = new stdClass;

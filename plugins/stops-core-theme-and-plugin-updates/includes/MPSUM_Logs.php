@@ -4,19 +4,18 @@
  *
  * Initializes the log table and sets up actions/events
  *
- * @since 6.0.0
- *
  * @package WordPress
+ * @since 6.0.0
  */
 class MPSUM_Logs {
 	
 	/**
-	* Holds the class instance.
-	*
-	* @since 6.0.0
-	* @access static
-	* @var MPSUM_Log $instance
-	*/
+     * Holds the class instance.
+     *
+     * @since 6.0.0
+     * @access static
+     * @var MPSUM_Log $instance
+     */
 	private static $instance = null;
 	
 	/**
@@ -56,23 +55,22 @@ class MPSUM_Logs {
 	private $translations_cache = null;
 	
 	/**
-	* Holds version number of the table
-	*
-	* @since 6.0.0
-	* @access static
-	* @var string $slug
-	*/
+     * Holds version number of the table
+     *
+     * @since 6.0.0
+     * @access private
+     * @var string $slug
+     */
 	private $version = '1.1.3';
 	
 	/**
-	* Set a class instance.
-	*
-	* Set a class instance.
-	*
-	* @since 5.0.0 
-	* @access static
-	*
-	*/
+     * Set a class instance.
+     *
+     * Set a class instance.
+     *
+     * @since 5.0.0 
+     * @access static
+     */
 	public static function run() {
 		if ( null == self::$instance ) {
 			self::$instance = new self;
@@ -80,19 +78,18 @@ class MPSUM_Logs {
 	} //end get_instance	
 	
 	/**
-	* Class constructor.
-	*
-	* Initialize the class
-	*
-	* @since 6.0.0
-	* @access private
-	*
-	*/
+     * Class constructor.
+     *
+     * Initialize the class
+     *
+     * @since 6.0.0
+     * @access private
+     */
 	private function __construct() {
 		$table_version = get_site_option( 'mpsum_log_table_version', '0' );
 		if ( version_compare( $table_version, $this->version ) < 0 ) {
 			$this->build_table();
-			update_site_option( 'mpsum_log_table_version', $this->version );
+			MPSUM_Updates_Manager::update_option( 'mpsum_log_table_version', $this->version );
 		}
 		
 		// Set plugin/theme/wordpress/translation variables for log error checking
@@ -123,13 +120,12 @@ class MPSUM_Logs {
 	} //end constructor
 	
 	/**
-	 * automatic_updates
-	 *
 	 * Log automatic updates
 	 *
 	 * @since 6.0.0
 	 * @access public
-	 *
+	 * @param array $update_results Update results
+	 * @return void
 	 */
 	public function automatic_updates( $update_results ) {
 		global $wpdb;
@@ -299,9 +295,8 @@ class MPSUM_Logs {
 	 *
 	 * @since 6.0.3
 	 * @access private
-	 *
-	 * @param	string type of translation update
-	 * @param	string $slug of item
+	 * @param	string $type type of translation update
+	 * @param	string $slug Slug of item
 	 * @return string The name of the item being updated.
 	 */
 	private function get_name_for_update( $type, $slug ) {
@@ -332,10 +327,9 @@ class MPSUM_Logs {
 	 *
 	 * @since 6.4.4
 	 * @access private
-	 *
-	 * @param	string type of translation update
-	 * @param	string $slug of item
-	 * @return string The name of the item being updated.
+	 * @param	string $type type of translation update
+	 * @param	string $slug Slug of item
+	 * @return string The version of the item being updated.
 	 */
 	private function get_version_for_type( $type, $slug ) {
 		$translation_updates = $this->translations_cache;
@@ -359,6 +353,13 @@ class MPSUM_Logs {
 		return '';
 	}
 	
+	/**
+	 * Manual updates
+	 *
+	 * @param array $upgrader_object Upgrade Object(s)
+	 * @param array $options 		 Update options
+	 * @return void
+	 */
 	public function manual_updates( $upgrader_object, $options ) {
 		if ( !isset( $options[ 'action' ] ) || 'update' !== $options[ 'action' ] ) return;
 		global $wpdb;
@@ -510,14 +511,13 @@ class MPSUM_Logs {
 	}
 	
 	/**
-	* Creates the log table
-	*
-	* Creates the log table
-	*
-	* @since 6.0.0
-	* @access private
-	*
-	*/
+     * Creates the log table
+     *
+     * Creates the log table
+     *
+     * @since 6.0.0
+     * @access private
+     */
 	private function build_table() {
 		global $wpdb;
 		$tablename = $wpdb->base_prefix . 'eum_logs';
@@ -546,14 +546,13 @@ class MPSUM_Logs {
 	}
 	
 	/**
-	* Clears the log table
-	*
-	* Clears the log table
-	*
-	* @since 6.0.0
-	* @access static
-	*
-	*/
+     * Clears the log table
+     *
+     * Clears the log table
+     *
+     * @since 6.0.0
+     * @access static
+     */
 	public static function clear() {
 		global $wpdb;
 		$tablename = $wpdb->base_prefix . 'eum_logs';
@@ -562,14 +561,13 @@ class MPSUM_Logs {
 	}
 	
 	/**
-	* Drops the log table
-	*
-	* Drops the log table
-	*
-	* @since 6.0.0
-	* @access static
-	*
-	*/
+     * Drops the log table
+     *
+     * Drops the log table
+     *
+     * @since 6.0.0
+     * @access static
+     */
 	public static function drop() {
 		global $wpdb;
 		$tablename = $wpdb->base_prefix . 'eum_logs';

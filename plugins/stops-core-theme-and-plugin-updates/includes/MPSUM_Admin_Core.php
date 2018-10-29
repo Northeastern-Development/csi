@@ -1,59 +1,56 @@
 <?php
 /**
- * Controls the main (general) tab
- *
  * Controls the main (general) tab and handles the saving of its options.
  *
- * @since 5.0.0
- *
  * @package WordPress
+ * @since 5.0.0
  */
 class MPSUM_Admin_Core {
 	/**
-	* Holds the slug to the admin panel page
-	*
-	* @since 5.0.0
-	* @access private
-	* @var string $slug
-	*/
+     * Holds the slug to the admin panel page
+     *
+     * @since 5.0.0
+     * @access private
+     * @var string $slug
+     */
 	private $slug = '';
 
 	/**
-	* Holds the tab name
-	*
-	* @since 5.0.0
-	* @access static
-	* @var string $tab
-	*/
+     * Holds the tab name
+     *
+     * @since 5.0.0
+     * @access static
+     * @var string $tab
+     */
 	private $tab = 'main';
 
 	/**
-	* Class constructor.
-	*
-	* Initialize the class
-	*
-	* @since 5.0.0
-	* @access public
-	*
-	* @param string $slug Slug to the admin panel page
-	*/
+     * Class constructor.
+     *
+     * Initialize the class
+     *
+     * @since 5.0.0
+     * @access public
+     *
+     * @param string $slug Slug to the admin panel page
+     */
 	public function __construct( $slug = '' ) {
 		$this->slug = $slug;
-		//Admin Tab Actions
+		// Admin Tab Actions
 		add_action( 'mpsum_admin_tab_main', array( $this, 'tab_output' ) );
 		add_action( 'admin_init', array( $this, 'maybe_save_options' ) );
 	}
 
 	/**
-	* Get tab defaults.
-	*
-	* Get default core plugin options.
-	*
-	* @since 5.0.0
-	* @access private
-	*
-	* @return array Associative array of default options
-	*/
+     * Get tab defaults.
+     *
+     * Get default core plugin options.
+     *
+     * @since 5.0.0
+     * @access static
+     *
+     * @return array Associative array of default options
+     */
 	public static function get_defaults() {
 
     	/**
@@ -85,16 +82,15 @@ class MPSUM_Admin_Core {
 	}
 
 	/**
-	* Determine whether the save the main options or not.
-	*
-	* Determine whether the save the main options or not.
-	*
-	* @since 5.0.0
-	* @access public
-	* @see __construct
-	* @internal Uses admin_init action
-	*
-	*/
+     * Determine whether to save the main options or not.
+     *
+     * Determine whether to save the main options or not.
+     *
+     * @since 5.0.0
+     * @access public
+     * @see __construct
+     * @internal Uses admin_init action
+     */
 	public function maybe_save_options() {
 		if ( !current_user_can( 'install_plugins' ) ) return;
 		if ( !isset( $_GET[ 'page' ] ) || $_GET[ 'page' ] != $this->slug ) return;
@@ -109,7 +105,7 @@ class MPSUM_Admin_Core {
 
 
 
-		//Save options
+		// Save options
 		$options = $_POST[ 'options' ];
 		if ( isset( $_POST[ 'reset' ] ) ) {
 			$options = self::get_defaults();
@@ -117,7 +113,7 @@ class MPSUM_Admin_Core {
 
 		$options_to_save = array();
 
-		//Check for valid e-mail address
+		// Check for valid e-mail address
 		if ( isset( $options[ 'email_addresses' ] ) ) {
 			$email_addresses = explode( ',', $options[ 'email_addresses' ] );
 			$email_addresses_to_save = array();
@@ -148,21 +144,21 @@ class MPSUM_Admin_Core {
 
 		MPSUM_Updates_Manager::update_options( $options_to_save, 'core' );
 
-		//Redirect back to settings screen
+		// Redirect back to settings screen
 		wp_redirect( esc_url_raw( add_query_arg( $query_args, MPSUM_Admin::get_url() ) ) );
 		exit;
 	}
 
 	/**
-	* Output the HTML interface for the main tab.
-	*
-	* Output the HTML interface for the main tab.
-	*
-	* @since 5.0.0
-	* @access public
-	* @see __construct
-	* @internal Uses the mpsum_admin_tab_main action
-	*/
+     * Output the HTML interface for the main tab.
+     *
+     * Output the HTML interface for the main tab.
+     *
+     * @since 5.0.0
+     * @access public
+     * @see __construct
+     * @internal Uses the mpsum_admin_tab_main action
+     */
 	public function tab_output() {
 		$options = MPSUM_Updates_Manager::get_options( 'core' );
 		$options = wp_parse_args( $options, self::get_defaults() );

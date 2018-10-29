@@ -4,13 +4,18 @@
  *
  * Disables all WordPress plugin updates.
  *
- * @since 5.0.0
- *
  * @package WordPress
+ * @since   5.0.0
  */
-//Credit - From https://wordpress.org/plugins/disable-wordpress-updates/
+
+ /**
+  * Disable plugin updates
+  * Credit - From https://wordpress.org/plugins/disable-wordpress-updates/
+  */
 class MPSUM_Disable_Updates_Plugins {
-	
+	/**
+	 * Constructor
+	 */
 	public function __construct() {
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
 		
@@ -19,10 +24,6 @@ class MPSUM_Disable_Updates_Plugins {
 		 * 2.8 to 3.0
 		 */
 		add_action( 'pre_transient_update_plugins', array( $this, 'last_checked_now' ) );
-		/*
-		 * 3.0
-		 */
-		add_filter( 'pre_site_transient_update_plugins', array( $this, 'last_checked_now' ) );
 		
 		/*
 		 * Disable All Automatic Updates
@@ -37,12 +38,10 @@ class MPSUM_Disable_Updates_Plugins {
 	/**
 	 * Initialize and load the plugin stuff
 	 *
-	 * @since 		1.3
-	 * @author 		scripts@schloebe.de
+	 * @since  1.3
+	 * @author scripts@schloebe.de
 	 */
 	function admin_init() {
-		
-		
 		/*
 		 * Disable Plugin Updates
 		 * 2.8 to 3.0
@@ -61,6 +60,12 @@ class MPSUM_Disable_Updates_Plugins {
 		
 	}
 	
+	/**
+	 * Last checked plugin updates
+	 *
+	 * @param  array $transient Transient options
+	 * @return object
+	 */
 	public function last_checked_now( $transient ) {
 		include ABSPATH . WPINC . '/version.php';
 		$current = new stdClass;

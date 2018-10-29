@@ -1,9 +1,9 @@
 === Easy Updates Manager ===
-Contributors: davidanderson, kidsguide, ronalfy, roary86, bigwing
+Contributors: davidanderson, kidsguide, ronalfy, roary86, bigwing, webulous
 Tags: updates manager, easy updates manager, disable updates manager, disable updates, update control, plugin updates, theme updates, core updates, automatic updates, multisite, logs
 Requires at least: 4.7
-Tested up to: 4.9
-Stable tag: 7.0.1
+Tested up to: 5.0
+Stable tag: 7.0.3
 License: GPLv2 or later
 
 Manage all your WordPress updates, including individual updates, automatic updates, logs, and loads more. Also works very well with WordPress Multisite.
@@ -103,16 +103,31 @@ For additional information and FAQs for Easy Updates Manager check out our <a hr
 
 == Changelog ==
 
-= 7.0.1 =
-Released 2018-03-05
+= 7.0.3 - 2018-06-26 = 
+
+* TWEAK: Disabling themes and plugins no longer disables translations.
+* TWEAK: Dashboard notices about other plugins of potential interest now only show on the Easy Updates Manager pages
+
+= 7.0.2 - 2018-06-18 =
+
+* TWEAK: Make all settings tabs work via ajax calls
+* TWEAK: Show and hide logs tab upon enable and disable
+* TWEAK: Add admin notices for insufficient php and wp versions
+* TWEAK: Remove flexbox mixin
+* TWEAK: Adding survey notice
+* TWEAK: Auto refresh page after force updates
+* TWEAK: Prevent users from excluding themselves
+
+= 7.0.1 - 2018-03-05 =
 
 * FIX: Enabling Log from Advanced tab does not use default options
 * FIX: Plugin settings page is not accessible for excluded users
 * TWEAK: Changed settings page to use admin-ajax.php instead of REST API
+* TWEAK: Reduced database queries for saving settings options
 * TWEAK: Removed the usage tracking code (which was always explicit opt-in)
+* TWEAK: Add Welcome dashboard and notices
 
-= 7.0.0 =
-Released 2018-01-28
+= 7.0.0 - 2018-01-28 =
 
 * Admin UI overhaul based on past data. It is now very obvious which settings are enabled. Thanks for all the feedback.
 
@@ -146,5 +161,5 @@ Released 2017-08-01
 For past changelogs, please visit our <a href="https://github.com/easy-updates-manager/easy-updates-manager/releases">GitHub</a>.
 
 == Upgrade Notice ==
-* 7.0.1: Switching back to admin ajax from REST API and few small tweaks and improvements
+* 7.0.3: Dashboard notices were appearing on pages where they were not intended to appear
 

@@ -1,16 +1,19 @@
 <?php
 /**
- * Disables all core WordPress updates
- *
  * Disables all core WordPress updates.
  *
- * @since 5.0.0
- *
  * @package WordPress
+ * @since 5.0.0
  */
-//Credit - From https://wordpress.org/plugins/disable-wordpress-updates/
+
+/**
+ * Disable WordPress core updates
+ * Credit - From https://wordpress.org/plugins/disable-wordpress-updates/
+ */
 class MPSUM_Disable_Updates_WordPress {
-	
+	/**
+	 * Constructor
+	 */
 	public function __construct() {
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
 		
@@ -20,6 +23,7 @@ class MPSUM_Disable_Updates_WordPress {
 		 * 2.8 to 3.0
 		 */
 		add_filter( 'pre_transient_update_core', array( $this, 'last_checked_now' ) );
+
 		/*
 		 * 3.0
 		 */
@@ -52,8 +56,6 @@ class MPSUM_Disable_Updates_WordPress {
 	 * @author 		scripts@schloebe.de
 	 */
 	function admin_init() {
-		
-		
 		/*
 		 * Disable Core Updates
 		 * 2.8 to 3.0
@@ -78,6 +80,12 @@ class MPSUM_Disable_Updates_WordPress {
 		wp_clear_scheduled_hook( 'wp_maybe_auto_update' );
 	}
 	
+	/**
+	 * Last checked core updates
+	 *
+	 * @param string $transient Specify transients
+	 * @return object
+	 */
 	public function last_checked_now( $transient ) {
 		include ABSPATH . WPINC . '/version.php';
 		$current = new stdClass;

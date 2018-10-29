@@ -1,51 +1,49 @@
 <?php
+if ( !defined('ABSPATH') ) die( 'No direct access.' );
 /**
  * Easy Updates Manager admin controller.
- *
  * Initializes the admin panel options and load the admin dependencies
  *
- * @since 5.0.0
- *
  * @package WordPress
+ * @since 5.0.0
  */
 class MPSUM_Admin {
 
 	/**
-	* Holds the class instance.
-	*
-	* @since 5.0.0
-	* @access static
-	* @var MPSUM_Admin $instance
-	*/
+     * Holds the class instance.
+     *
+     * @since 5.0.0
+     * @access static
+     * @var MPSUM_Admin $instance
+     */
 	private static $instance = null;
 
 	/**
-	* Holds the URL to the admin panel page
-	*
-	* @since 5.0.0
-	* @access static
-	* @var string $url
-	*/
+     * Holds the URL to the admin panel page
+     *
+     * @since 5.0.0
+     * @access static
+     * @var string $url
+     */
 	private static $url = '';
 
 	/**
-	* Holds the slug to the admin panel page
-	*
-	* @since 5.0.0
-	* @access static
-	* @var string $slug
-	*/
+     * Holds the slug to the admin panel page
+     *
+     * @since 5.0.0
+     * @access static
+     * @var string $slug
+     */
 	private static $slug = 'mpsum-update-options';
 
 	/**
-	* Set a class instance.
-	*
-	* Set a class instance.
-	*
-	* @since 5.0.0
-	* @access static
-	*
-	*/
+     * Set a class instance.
+     *
+     * Set a class instance.
+     *
+     * @since 5.0.0
+     * @access static
+     */
 	public static function run() {
 		if ( null == self::$instance ) {
 			self::$instance = new self;
@@ -54,14 +52,13 @@ class MPSUM_Admin {
 	} //end get_instance
 
 	/**
-	* Class constructor.
-	*
-	* Initialize the class
-	*
-	* @since 5.0.0
-	* @access private
-	*
-	*/
+     * Class constructor.
+     *
+     * Initialize the class
+     *
+     * @since 5.0.0
+     * @access private
+     */
 	private function __construct() {
 		add_action( 'init', array( $this, 'init' ), 9 );
 		add_filter( 'set-screen-option', array( $this, 'add_screen_option_save' ), 10, 3 );
@@ -69,29 +66,28 @@ class MPSUM_Admin {
 	} //end constructor
 
 	/**
-	* Save the screen options.
-	*
-	* Save the screen options.
-	*
-	* @since 6.2.0
-	* @access static
-	*
-	* @return string URL to the admin panel page.
-	*/
+     * Save the screen options.
+     *
+     * @since 6.2.0
+	 * @param string $status Screen option status
+	 * @param string $option Screen option
+	 * @param string $value  Screen value
+	 * @return string Returns value if succeeds, otherwise status
+	 */
 	public function add_screen_option_save( $status, $option, $value ) {
 		return MPSUM_Admin_Screen_Options::save_options( $status, $option, $value );
 	}
 
 	/**
-	* Return the URL to the admin panel page.
-	*
-	* Return the URL to the admin panel page.
-	*
-	* @since 5.0.0
-	* @access static
-	*
-	* @return string URL to the admin panel page.
-	*/
+     * Return the URL to the admin panel page.
+     *
+     * Return the URL to the admin panel page.
+     *
+     * @since 5.0.0
+     * @access static
+     *
+     * @return string URL to the admin panel page.
+     */
 	public static function get_url() {
 		$url = self::$url;
 		if ( empty( $url ) ) {
@@ -106,44 +102,43 @@ class MPSUM_Admin {
 	}
 
 	/**
-	* Return the slug for the admin panel page.
-	*
-	* Return the slug for the admin panel page.
-	*
-	* @since 5.0.0
-	* @access static
-	*
-	* @return string slug to the admin panel page.
-	*/
+     * Return the slug for the admin panel page.
+     *
+     * Return the slug for the admin panel page.
+     *
+     * @since 5.0.0
+     * @access static
+     *
+     * @return string slug to the admin panel page.
+     */
 	public static function get_slug() {
 		return self::$slug;
 	}
 
 	/**
-	* Initialize the admin menu.
-	*
-	* Initialize the admin menu.
-	*
-	* @since 5.0.0
-	* @access public
-	* @see __construct
-	* @internal Uses init action
-	*
-	*/
+     * Initialize the admin menu.
+     *
+     * Initialize the admin menu.
+     *
+     * @since 5.0.0
+     * @access public
+     * @see __construct
+     * @internal Uses init action
+     */
 	public function init() {
 
-		//Plugin and Theme actions
+		// Plugin and Theme actions
 		if ( is_multisite() ) {
 			add_action( 'network_admin_menu', array( $this, 'init_network_admin_menus' ) );
 		} else {
 			add_action( 'admin_menu', array( $this, 'init_single_site_admin_menus' ) );
 		}
 
-		//Add settings link to plugins screen
+		// Add settings link to plugins screen
 		$prefix = is_multisite() ? 'network_admin_' : '';
 		add_action( $prefix . 'plugin_action_links_' . MPSUM_Updates_Manager::get_plugin_basename(), array( $this, 'plugin_settings_link' ) );
 
-		//todo - maybe load these conditionally based on $_REQUEST[ 'tab' ] param
+		// todo - maybe load these conditionally based on $_REQUEST[ 'tab' ] param
 		$core_options = MPSUM_Updates_Manager::get_options( 'core' );
 		new MPSUM_Admin_Dashboard( self::get_slug() );
 		new MPSUM_Admin_Plugins( self::get_slug() );
@@ -159,31 +154,29 @@ class MPSUM_Admin {
 	}
 
 	/**
-	* Initializes the help screen.
-	*
-	* Initializes the help screen.
-	*
-	* @since 5.0.0
-	* @access public
-	* @see init
-	* @internal Uses load_{$hook} action
-	*
-	*/
+     * Initializes the help screen.
+     *
+     * Initializes the help screen.
+     *
+     * @since 5.0.0
+     * @access public
+     * @see init
+     * @internal Uses load_{$hook} action
+     */
 	public function init_help_screen() {
 		new MPSUM_Admin_Help();
 	}
 
 	/**
-	* Initializes the screen options.
-	*
-	* Initializes the screen options.
-	*
-	* @since 6.2
-	* @access public
-	* @see init
-	* @internal Uses load_{$hook} action
-	*
-	*/
+     * Initializes the screen options.
+     *
+     * Initializes the screen options.
+     *
+     * @since 6.2
+     * @access public
+     * @see init
+     * @internal Uses load_{$hook} action
+     */
 	public function init_screen_options() {
 		MPSUM_Admin_Screen_Options::run();
 	}
@@ -197,7 +190,6 @@ class MPSUM_Admin {
 	 * @access public
 	 *
 	 * @return array EUM implementation options
-	 *
 	 */
 	private function get_options_for_default() {
 		$options = MPSUM_Updates_Manager::get_options();
@@ -220,14 +212,20 @@ class MPSUM_Admin {
 
 	}
 
+	/**
+	 * Enqueue scripts
+	 *
+	 * @return void
+	 */
 	public function enqueue_scripts() {
 		$pagenow = isset( $_GET[ 'page' ] ) ? $_GET[  'page' ] : false;
 		$is_active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : false;
 
-		//Check to make sure we're on the mpsum admin page
+		// Check to make sure we're on the mpsum admin page
 		if ( $pagenow != 'mpsum-update-options' ) {
 			return;
 		}
+		$min_or_not = ( defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ) ? '' : '.min';
 
 		// Get user data
 		$user_id = get_current_user_id();
@@ -236,7 +234,9 @@ class MPSUM_Admin {
 		// Get options
 		$options = MPSUM_Updates_Manager::get_options( 'core' );
 
-		wp_enqueue_script( 'mpsum_dashboard', MPSUM_Updates_Manager::get_plugin_url( '/js/admin.js' ), array( 'jquery' ), '20180126', true );
+		wp_enqueue_script( 'jquery-blockui', MPSUM_Updates_Manager::get_plugin_url( '/js/jquery.blockUI' . $min_or_not . '.js' ), array('jquery'), EASY_UPDATES_MANAGER_VERSION, true);
+		wp_enqueue_script( 'mpsum_dashboard_react', MPSUM_Updates_Manager::get_plugin_url( '/js/admin' . $min_or_not . '.js' ), array( 'jquery' ), EASY_UPDATES_MANAGER_VERSION, true );
+		wp_enqueue_script( 'mpsum_dashboard_js', MPSUM_Updates_Manager::get_plugin_url( '/js/eum-admin' . $min_or_not .'.js' ), array( 'jquery' ), EASY_UPDATES_MANAGER_VERSION, true );
 
 		$user_id = get_current_user_id();
 		$dashboard_showing = get_user_meta( $user_id, 'mpsum_dashboard', true );
@@ -368,7 +368,7 @@ class MPSUM_Admin {
 			'translation_updates_label_off_status'       => __( 'Translation updates are disabled.', 'stops-core-theme-and-plugin-updates' ),
 		);
 
-		wp_localize_script( 'mpsum_dashboard', 'mpsum', array(
+		wp_localize_script( 'mpsum_dashboard_react', 'mpsum', apply_filters('eum_i18n', array(
 			'spinner'           => MPSUM_Updates_Manager::get_plugin_url( '/images/spinner.gif' ),
 			'tabs'              => _x( 'Tabs', 'Show or hide admin tabs', 'stops-core-theme-and-plugin-updates' ),
 			'dashboard'         => _x( 'Show Dashboard', 'Show or hide the dashboard', 'stops-core-theme-and-plugin-updates' ),
@@ -385,22 +385,24 @@ class MPSUM_Admin {
 			),
 			'eum_nonce'        => wp_create_nonce( 'eum_nonce' ),
 			'ajax_url'          => admin_url( 'admin-ajax.php' ),
+			'unexpected_response' => __( 'Unexpected response:', 'stops-core-theme-and-plugin-updates' ),
 			'I18N'              => $I18N,
-		) );
-		wp_enqueue_style( 'mpsum_dashboard', MPSUM_Updates_Manager::get_plugin_url( '/css/style.css' ), array(), '20180126' );
+			'saving'            => __( 'Saving...', 'stops-core-theme-and-plugin-updates' ),
+			'working'            => __( 'Working...', 'stops-core-theme-and-plugin-updates' )
+		)) );
+		wp_enqueue_style( 'mpsum_dashboard', MPSUM_Updates_Manager::get_plugin_url( '/css/style.css' ), array(), EASY_UPDATES_MANAGER_VERSION );
 	}
 
 	/**
-	* Adds a sub-menu page for multisite.
-	*
-	* Adds a sub-menu page for multisite.
-	*
-	* @since 5.0.0
-	* @access public
-	* @see init
-	* @internal Uses network_admin_menu action
-	*
-	*/
+     * Adds a sub-menu page for multisite.
+     *
+     * Adds a sub-menu page for multisite.
+     *
+     * @since 5.0.0
+     * @access public
+     * @see init
+     * @internal Uses network_admin_menu action
+     */
 	public function init_network_admin_menus() {
 		$hook = add_dashboard_page( __( 'Updates Options', 'stops-core-theme-and-plugin-updates' ) , __( 'Updates Options', 'stops-core-theme-and-plugin-updates' ), 'install_plugins', self::get_slug(), array( $this, 'output_admin_interface' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
@@ -409,16 +411,15 @@ class MPSUM_Admin {
 	}
 
 	/**
-	* Adds a sub-menu page for single-site.
-	*
-	* Adds a sub-menu page for single-site.
-	*
-	* @since 5.0.0
-	* @access public
-	* @see init
-	* @internal Uses admin_menu action
-	*
-	*/
+     * Adds a sub-menu page for single-site.
+     *
+     * Adds a sub-menu page for single-site.
+     *
+     * @since 5.0.0
+     * @access public
+     * @see init
+     * @internal Uses admin_menu action
+     */
 	public function init_single_site_admin_menus() {
 		$hook = add_dashboard_page( __( 'Updates Options', 'stops-core-theme-and-plugin-updates' ) , __( 'Updates Options', 'stops-core-theme-and-plugin-updates' ), 'install_plugins', self::get_slug(), array( $this, 'output_admin_interface' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
@@ -427,15 +428,14 @@ class MPSUM_Admin {
 	}
 
 	/**
-	* Outputs admin interface for sub-menu.
-	*
-	* Outputs admin interface for sub-menu.
-	*
-	* @since 5.0.0
-	* @access public
-	* @see init_network_admin_menus, init_single_site_admin_menus
-	*
-	*/
+     * Outputs admin interface for sub-menu.
+     *
+     * Outputs admin interface for sub-menu.
+     *
+     * @since 5.0.0
+     * @access public
+     * @see init_network_admin_menus, init_single_site_admin_menus
+     */
 	public function output_admin_interface() {
 		?>
 		<div class="wrap">
@@ -453,7 +453,8 @@ class MPSUM_Admin {
 				'action' => 'mpsum_admin_tab_dashboard' /* action variable in do_action */
 			);
 
-			/*$tabs[] = array(
+			/*
+			$tabs[] = array(
 				'url'    => add_query_arg( array( 'tab' => 'main' ), self::get_url() ),
 				'label'  => esc_html__( 'General', 'stops-core-theme-and-plugin-updates' ),
 				'get'    => 'main' ,
@@ -531,16 +532,14 @@ class MPSUM_Admin {
 	} //end output_admin_interface
 
 	/**
-	* Outputs admin interface for sub-menu.
-	*
-	* Outputs admin interface for sub-menu.
-	*
-	* @since 5.0.0
-	* @access public
-	* @see __construct
-	* @internal Uses $prefix . "plugin_action_links_$plugin_file" action
-	* @return array Array of settings
-	*/
+     * Adds plugin settings page link to plugin links in WordPress Dashboard Plugins Page
+     *
+     * @since 5.0.0
+     * @access public
+     * @see __construct
+	 * @param array $settings Uses $prefix . "plugin_action_links_$plugin_file" action
+     * @return array Array of settings
+	 */
 	public function plugin_settings_link( $settings ) {
 		$admin_anchor = sprintf( '<a href="%s">%s</a>', esc_url( $this->get_url() ), esc_html__( 'Configure', 'stops-core-theme-and-plugin-updates' ) );
 
@@ -552,15 +551,12 @@ class MPSUM_Admin {
 	}
 
 	/**
-	* Add a ratings nag to the footer.
-	*
-	* Add a ratings nag to the footer.
-	*
-	* @since 7.0.0
-	* @access static
-	*
-	* @return string URL to the admin panel page.
-	*/
+     * Add a ratings nag to the footer.
+     *
+     * @since 7.0.0
+	 * @param string $text Text for the rating
+	 * @return string URL to the wordpress.org reviews page
+	 */
 	public function ratings_nag( $text ) {
 
 		if ( ! isset( $_GET[ 'page' ] ) || 'mpsum-update-options' != $_GET[ 'page' ] ) {
@@ -572,7 +568,7 @@ class MPSUM_Admin {
 
 		$return = '<span id="footer-thankyou">';
 		$return .= $text;
-		$return .= sprintf( ' <a href="%s">%s <img src="%s" alt="Five Star Rating" /> ', esc_url( 'https://wordpress.org/support/plugin/stops-core-theme-and-plugin-updates/reviews/#new-post' ), esc_html__( 'Please Rate Easy Updates Manager!', 'stops-core-theme-and-plugin-updates' ), esc_url( MPSUM_Updates_Manager::get_plugin_url( '/images/ratings.png' ) ) );
+		$return .= sprintf( ' <a href="%s">%s <img src="%s" alt="Five Star Rating" /></a>', esc_url( 'https://wordpress.org/support/plugin/stops-core-theme-and-plugin-updates/reviews/#new-post' ), esc_html__( 'Please Rate Easy Updates Manager!', 'stops-core-theme-and-plugin-updates' ), esc_url( MPSUM_Updates_Manager::get_plugin_url( '/images/ratings.png' ) ) );
 		$return .= '</span>';
 		return $return;
 

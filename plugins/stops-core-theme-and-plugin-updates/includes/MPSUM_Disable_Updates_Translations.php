@@ -2,18 +2,19 @@
 /**
  * Disables all WordPress translation updates.
  *
- * Disables all WordPress translation updates.
- *
- * @since 5.0.0
- *
  * @package WordPress
+ *  @since 5.0.0
  */
-//Credit - From https://wordpress.org/plugins/disable-wordpress-updates/
-class MPSUM_Disable_Updates_Translations {
-	
-	public function __construct() {
-		
 
+/**
+ * Disable tranlastion updates
+ * Credit - From https://wordpress.org/plugins/disable-wordpress-updates/
+ */
+class MPSUM_Disable_Updates_Translations {
+	/**
+	 * Constructor
+	 */
+	public function __construct() {
 		/*
 		 * Disable All Automatic Updates
 		 * 3.7+
@@ -27,6 +28,7 @@ class MPSUM_Disable_Updates_Translations {
 		 * 2.8 to 3.0
 		 */
 		add_filter( 'transient_update_themes', array( $this, 'remove_translations' ) );
+
 		/*
 		 * 3.0
 		 */
@@ -38,6 +40,7 @@ class MPSUM_Disable_Updates_Translations {
 		 * 2.8 to 3.0
 		 */
 		add_action( 'transient_update_plugins', array( $this, 'remove_translations' ) );
+
 		/*
 		 * 3.0
 		 */
@@ -49,6 +52,7 @@ class MPSUM_Disable_Updates_Translations {
 		 * 2.8 to 3.0
 		 */
 		add_filter( 'transient_update_core', array( $this, 'remove_translations' ) );
+
 		/*
 		 * 3.0
 		 */
@@ -56,7 +60,12 @@ class MPSUM_Disable_Updates_Translations {
 		
 	} //end constructor
 	
-	
+	/**
+	 * Remove translations
+	 *
+	 * @param array $transient Transient options
+	 * @return array
+	 */
 	public function remove_translations( $transient ) {
 		
 		if ( is_object( $transient ) && isset( $transient->translations ) ) {

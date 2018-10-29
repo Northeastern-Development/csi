@@ -1,4 +1,5 @@
 <?php
+if ( !defined( 'ABSPATH' ) ) die( 'No direct access.' );
 /**
  * Easy Updates Manager Plugins List Table class.
  *
@@ -25,8 +26,10 @@ class MPSUM_Plugins_List_Table extends MPSUM_List_Table {
 		global $status, $page;
 
 		parent::__construct( array(
+			'singular' => 'plugin',
 			'plural' => 'plugins',
 			'screen' => isset( $args['screen'] ) ? $args['screen'] : null,
+			'ajax' => true
 		) );
 
 		$this->tab = isset( $args[ 'tab' ] ) ? $args[ 'tab' ] : '';
@@ -43,19 +46,34 @@ class MPSUM_Plugins_List_Table extends MPSUM_List_Table {
 		$page = $this->get_pagenum();
 	}
 
+	/**
+	 * Get table classes
+	 *
+	 * @return array
+	 */
 	protected function get_table_classes() {
 		return array( 'widefat', $this->_args['plural'] );
 	}
 
+	/**
+	 * Ajax user capability check
+	 *
+	 * @return boolean
+	 */
 	public function ajax_user_can() {
 		return current_user_can('activate_plugins');
 	}
 
+	/**
+	 * Prepares plugin items to display
+	 *
+	 * Prepares plugin items by setting pagination variables, order, filter
+	 */
 	public function prepare_items() {
 
 		global $orderby, $order, $totals, $status;
 		$order = 'DESC';
-		$page = isset( $_GET[ 'paged' ] ) ? absint( $_GET[ 'paged' ] ) : 1;
+		$page = $this->get_pagenum();
 		$orderby = 'Name';
 
 		/**
@@ -104,7 +122,7 @@ class MPSUM_Plugins_List_Table extends MPSUM_List_Table {
 		foreach ( $plugins as $type => $list )
 			$totals[ $type ] = count( $list );
 
-		//Disable the automatic updates view
+		// Disable the automatic updates view
 		$core_options = MPSUM_Updates_Manager::get_options( 'core' );
 		if ( isset( $core_options[ 'automatic_plugin_updates' ] ) && 'individual' !== $core_options[ 'automatic_plugin_updates' ] ) {
 			unset( $totals[ 'automatic' ] );
@@ -138,13 +156,71 @@ class MPSUM_Plugins_List_Table extends MPSUM_List_Table {
 		$this->set_pagination_args( array(
 			'total_items' => $total_this_page,
 			'per_page' => $plugins_per_page,
+			'total_pages'	=> ceil( $total_this_page / $plugins_per_page ),
+			// Set plugin status value (useful for AJAX)
+			'plugin_status'	=> $status,
+			'tab' => isset($this->tab) ? $this->tab : ''
 		) );
 	}
 
 	/**
-	 * @staticvar string $term
-	 * @param array $plugin
-	 * @return boolean
+	 * Captures response content of ajax call and returns it
+	 */
+	public function ajax_response() {
+
+		$this->prepare_items();
+		extract( $this->_args );
+		extract( $this->_pagination_args, EXTR_SKIP );
+
+		ob_start();
+		$this->views();
+		$views = ob_get_clean();
+
+		ob_start();
+		if ( !empty( $_REQUEST['no_placeholder'] ) ) {
+			$this->display_rows();
+		} else {
+			$this->display_rows_or_placeholder();
+		}
+		$rows = ob_get_clean();
+
+		// We don't have to update column header, but may be needed later, if sorting is introduced
+		ob_start();
+		$this->print_column_headers();
+		$headers = ob_get_clean();
+
+		ob_start();
+		$this->pagination( 'top' );
+		$pagination_top = ob_get_clean();
+
+		ob_start();
+		$this->pagination( 'bottom' );
+		$pagination_bottom = ob_get_clean();
+
+		$response['views'] = array( $views );
+		$response['rows'] = array( $rows );
+		$response['pagination']['top'] = $pagination_top;
+		$response['pagination']['bottom'] = $pagination_bottom;
+		$response['headers'] = $headers;
+
+		if ( isset( $total_items ) ) {
+			$response['total_items_i18n'] = sprintf( _n( '1 plugin', '%s plugins', $total_items ), number_format_i18n( $total_items ) );
+		}
+
+		if ( isset( $total_pages ) ) {
+			$response['total_pages'] = $total_pages;
+			$response['total_pages_i18n'] = number_format_i18n( $total_pages );
+		}
+
+		wp_send_json( $response );
+	}
+
+	/**
+	 * Call back function for search functionality
+	 *
+	 * @static string $term Term to search
+	 * @param array $plugin Plugin name
+	 * @return boolean Returns true if term found, otherwise false
 	 */
 	public function _search_callback( $plugin ) {
 		static $term;
@@ -161,10 +237,12 @@ class MPSUM_Plugins_List_Table extends MPSUM_List_Table {
 	}
 
 	/**
+	 * Callback order
+	 *
 	 * @global string $orderby
 	 * @global string $order
-	 * @param array $plugin_a
-	 * @param array $plugin_b
+	 * @param array $plugin_a Plugin A
+	 * @param array $plugin_b Plugin B
 	 * @return int
 	 */
 	public function _order_callback( $plugin_a, $plugin_b ) {
@@ -182,6 +260,11 @@ class MPSUM_Plugins_List_Table extends MPSUM_List_Table {
 			return ( $a < $b ) ? -1 : 1;
 	}
 
+	/**
+	 * No items
+	 *
+	 * @return void
+	 */
 	public function no_items() {
 		global $plugins;
 
@@ -191,6 +274,11 @@ class MPSUM_Plugins_List_Table extends MPSUM_List_Table {
 			_e( 'You do not appear to have any plugins available at this time.', 'stops-core-theme-and-plugin-updates' );
 	}
 
+		/**
+		 * Get columns
+		 *
+		 * @return array
+		 */
 	public function get_columns() {
 		global $status;
 
@@ -201,10 +289,20 @@ class MPSUM_Plugins_List_Table extends MPSUM_List_Table {
 		);
 	}
 
+	/**
+	 * Get sotable columns
+	 *
+	 * @return array
+	 */
 	protected function get_sortable_columns() {
 		return array();
 	}
 
+	/**
+	 * Get views
+	 *
+	 * @return array
+	 */
 	protected function get_views() {
 		global $totals, $status;
 
@@ -231,11 +329,12 @@ class MPSUM_Plugins_List_Table extends MPSUM_List_Table {
 			if ( 'search' != $type ) {
 				$plugin_url = MPSUM_Admin::get_url();
 				$query_args = array(
-					'tab' => $this->tab,
+					'tab' => isset( $_REQUEST['tab'] ) ? $_REQUEST['tab'] : 'all',
 					'plugin_status' => $type
 				);
-				$status_links[$type] = sprintf( "<a href='%s' %s>%s</a>",
+				$status_links[$type] = sprintf( "<a href='%s' data-plugin_status='%s' %s>%s</a>",
 					add_query_arg( $query_args, $plugin_url ),
+					$status,
 					( $type == $status ) ? ' class="current"' : '',
 					sprintf( $text, number_format_i18n( $count ) )
 					);
@@ -245,6 +344,11 @@ class MPSUM_Plugins_List_Table extends MPSUM_List_Table {
 		return $status_links;
 	}
 
+	/**
+	 * Get bulk actions
+	 *
+	 * @return array
+	 */
 	protected function get_bulk_actions() {
 		global $status;
 
@@ -262,8 +366,10 @@ class MPSUM_Plugins_List_Table extends MPSUM_List_Table {
 	}
 
 	/**
+	 * Bulk action
+	 *
 	 * @global string $status
-	 * @param string $which
+	 * @param string $which Specify which bulk action
 	 * @return null
 	 */
 	public function bulk_actions( $which = '' ) {
@@ -276,8 +382,10 @@ class MPSUM_Plugins_List_Table extends MPSUM_List_Table {
 	}
 
 	/**
+	 * Extra table Nav
+	 *
 	 * @global string $status
-	 * @param string $which
+	 * @param string $which Specify which table nav
 	 * @return null
 	 */
 	protected function extra_tablenav( $which ) {
@@ -311,6 +419,11 @@ class MPSUM_Plugins_List_Table extends MPSUM_List_Table {
 		echo '</div>';
 	}
 
+	/**
+	 * Currect action
+	 *
+	 * @return string
+	 */
 	public function current_action() {
 		if ( isset($_POST['clear-recent-list']) )
 			return 'clear-recent-list';
@@ -318,6 +431,11 @@ class MPSUM_Plugins_List_Table extends MPSUM_List_Table {
 		return parent::current_action();
 	}
 
+	/**
+	 * Display rows
+	 *
+	 * @return void
+	 */
 	public function display_rows() {
 		global $status;
 
@@ -329,11 +447,13 @@ class MPSUM_Plugins_List_Table extends MPSUM_List_Table {
 	}
 
 	/**
+	 * Single row
+	 *
 	 * @global string $status
 	 * @global int $page
 	 * @global string $s
 	 * @global array $totals
-	 * @param array $item
+	 * @param array $item Single row item
 	 */
 	public function single_row( $item ) {
 		global $status, $page, $s, $totals;
@@ -391,56 +511,80 @@ class MPSUM_Plugins_List_Table extends MPSUM_List_Table {
 						}
 					}
 					echo $icon;
-					echo '<div class="eum-plugin-name-actions">';
-					echo "<h3 class='eum-plugin-name'>$plugin_name</h3>";
-					echo '<h4>Plugin Updates</h4>';
+					echo '<div class="eum-plugins-name-actions">';
+					echo "<h3 class='eum-plugins-name'>$plugin_name</h3>";
+					echo '<div class="eum-plugins-wrapper">';
+					printf( '<h4>%s</h4>', esc_html__( 'Plugin Updates', 'stops-core-theme-and-plugin-updates' ) );
 
-					echo '<div class="toggle-wrapper">';
+					echo '<div class="toggle-wrapper toggle-wrapper-plugins">';
 
 					$enable_class = $disable_class = '';
+					$checked = 'false';
 					$key = in_array( $plugin_slug, $plugin_options );
 					if ( ! $key ) {
-						$enable_class = 'eum-active';
+						$enable_class = 'eum-enabled eum-active';
+						$checked = 'true';
 					} else {
-						$disable_class = 'eum-active';
+						$disable_class = 'eum-disabled eum-active';
 					}
 
-					// Enable link
-					$enable_url = add_query_arg( array( 'action' => 'allow-update-selected', '_mpsum' => wp_create_nonce( 'mpsum_plugin_update' ), 'checked' => array( $plugin_slug ) ) );
-					printf( '<a href="%s" aria-label="%s"  class="eum-toggle-button %s">%s</a>', esc_url( $enable_url ), esc_attr__( 'Allow Updates', 'stops-core-theme-and-plugin-updates' ), esc_attr( $enable_class ), esc_html__( 'On', 'stops-core-theme-and-plugin-updates' ) );
+					printf( '<input type="hidden" name="plugins[%s]" value="%s">',
+						$plugin_slug,
+						$checked
+					);
 
-					// Disable Link
-					$disable_url = add_query_arg( array( 'action' => 'disallow-update-selected', '_mpsum' => wp_create_nonce( 'mpsum_plugin_update' ), 'checked' => array( $plugin_slug ) ) );
-					printf( '<a href="%s" aria-label="%s" class="eum-toggle-button %s">%s</a>', esc_url( $disable_url ), esc_attr__( 'Disallow Updates', 'stops-core-theme-and-plugin-updates' ),
-					esc_attr( $disable_class ),
-					esc_html__( 'Off', 'stops-core-theme-and-plugin-updates' ) );
-					echo '</div>';
-					//Automatic Link
+					printf( '<button aria-label="%s" class="eum-toggle-button eum-enabled %s" data-checked="%s">%s</button>',
+						esc_attr__( 'Allow Updates', 'stops-core-theme-and-plugin-updates' ),
+						esc_attr( $enable_class ),
+						$plugin_slug,
+						esc_html__( 'On', 'stops-core-theme-and-plugin-updates' )
+					);
+
+					printf( '<button aria-label="%s" class="eum-toggle-button eum-disabled %s" data-checked="%s">%s</button>',
+						esc_attr__( 'Disallow Updates', 'stops-core-theme-and-plugin-updates' ),
+						esc_attr( $disable_class ),
+						$plugin_slug,
+						esc_html__( 'Off', 'stops-core-theme-and-plugin-updates' )
+					);
+
+					echo '</div></div>';
+
+					// Automatic Link
 					$plugin_automatic_options = MPSUM_Updates_Manager::get_options( 'plugins_automatic' );
 					$core_options = MPSUM_Updates_Manager::get_options( 'core' );
-					if ( isset( $core_options[ 'automatic_plugin_updates' ] ) && 'individual' == $core_options[ 'automatic_plugin_updates' ] && ! $key ) {
-						echo '<h4>Automatic Updates</h4>';
-						echo '<div class="toggle-wrapper">';
+					if ( isset( $core_options[ 'automatic_plugin_updates' ] ) && 'individual' == $core_options[ 'automatic_plugin_updates' ] ) {
+						printf( '<div class="eum-plugins-automatic-wrapper" %s>', ( $key ) ? 'style="display: none;"' : '' );
+						printf( '<h4>%s</h4>', esc_html__( 'Automatic Updates', 'stops-core-theme-and-plugin-updates' ) );
+						echo '<div class="toggle-wrapper toggle-wrapper-plugins-automatic">';
 						$enable_class = $disable_class = '';
+						$checked = 'false';
 						if ( in_array( $plugin_slug, $plugin_automatic_options ) ) {
 							$enable_class = 'eum-active';
+							$checked = 'true';
 						} else {
 							$disable_class = 'eum-active';
 						}
 
-						//Enable Link
-						$enable_automatic_url = add_query_arg( array( 'action' => 'allow-automatic-selected', '_mpsum' => wp_create_nonce( 'mpsum_plugin_update' ), 'checked' => array( $plugin_slug ) ) );
-						printf( '<a href="%s" aria-label="%s" class="eum-toggle-button %s">%s</a>', esc_url( $enable_automatic_url ), esc_html__( 'Enable Automatic Updates', 'stops-core-theme-and-plugin-updates' ),
-						esc_attr( $enable_class ),
-						 esc_html__( 'On', 'stops-core-theme-and-plugin-updates' ) );
+						printf( '<input type="hidden" name="plugins_automatic[%s]" value="%s">',
+							$plugin_slug,
+							$checked
+						);
 
-						//Disable Link
-						$disable_automatic_url = add_query_arg( array( 'action' => 'disallow-automatic-selected', '_mpsum' => wp_create_nonce( 'mpsum_plugin_update' ), 'checked' => array( $plugin_slug ) ) );
-						printf( '<a href="%s" aria-label="%s" class="eum-toggle-button %s">%s</a>', esc_url( $disable_automatic_url ), esc_attr__( 'Enable Automatic Updates', 'stops-core-theme-and-plugin-updates' ),
-						esc_attr( $disable_class ), esc_html__( 'Off', 'stops-core-theme-and-plugin-updates' ) );
+						printf( '<button aria-label="%s" class="eum-toggle-button eum-enabled %s" data-checked="%s">%s</button>',
+							esc_html__( 'Enable Automatic Updates', 'stops-core-theme-and-plugin-updates' ),
+							esc_attr( $enable_class ),
+							$plugin_slug,
+							esc_html__( 'On', 'stops-core-theme-and-plugin-updates' )
+						);
 
+						printf( '<button aria-label="%s" class="eum-toggle-button eum-disabled %s" data-checked="%s">%s</button>',
+							esc_attr__( 'Enable Automatic Updates', 'stops-core-theme-and-plugin-updates' ),
+							esc_attr( $disable_class ),
+							$plugin_slug,
+							esc_html__( 'Off', 'stops-core-theme-and-plugin-updates' )
+						);
 
-						echo '</div>';
+						echo '</div></div>';
 					}
 					echo '</div>';
 					echo "</td>";

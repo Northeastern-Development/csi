@@ -1,13 +1,13 @@
 <?php
 /**
-* Uninstall script
-*
-* Uninstall script for Easy Updates Manager.
-*
-* @since 5.0.0
-*
-* @package WordPress
-*/
+ * Uninstall script
+ *
+ * Uninstall script for Easy Updates Manager.
+ *
+ * @package WordPress
+ * @since 5.0.0
+ */
+
 if (!defined( 'WP_UNINSTALL_PLUGIN' )) {
     exit ();
 } 

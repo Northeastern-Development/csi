@@ -1,24 +1,21 @@
 <?php
 /**
  * Help Screen for Easy Updates Manager
- *
  * Initializes and outputs the help screen for the plugin.
  *
- * @since 5.0.0
- *
  * @package WordPress
+ * @since 5.0.0
  */
 class MPSUM_Admin_Help {
 
 	/**
-	* Class constructor.
-	*
-	* Initialize the class
-	*
-	* @since 5.0.0
-	* @access public
-	*
-	*/
+     * Class constructor.
+     *
+     * Initialize the class
+     *
+     * @since 5.0.0
+     * @access public
+     */
 	public function __construct() {
 		$screen = get_current_screen();
 

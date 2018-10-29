@@ -35,7 +35,7 @@ class WPForms_Logging {
 	public function register_post_type() {
 
 		$log_args = array(
-			'labels'              => array( 'name' => __( 'WPForms Logs', 'wpforms' ), 'menu_name' => __( 'Logs', 'wpforms' ) ),
+			'labels'              => array( 'name' => esc_html__( 'WPForms Logs', 'wpforms' ), 'menu_name' => esc_html__( 'Logs', 'wpforms' ) ),
 			'public'              => false,
 			'exclude_from_search' => true,
 			'publicly_queryable'  => false,
@@ -45,7 +45,8 @@ class WPForms_Logging {
 			'capability_type'     => 'post',
 			'supports'            => array( 'title', 'editor' ),
 			'can_export'          => false,
-			'show_in_menu'        => 'wpforms-overview'
+			'show_in_menu'        => 'wpforms-overview',
+			'show_in_admin_bar'   => false,
 		);
 
 		if ( wpforms_debug() ) {
@@ -111,7 +112,7 @@ class WPForms_Logging {
 	 * @return int Log ID
 	 */
 	public function add( $title = '', $message = '', $parent = 0, $type = null, $meta = '' ) {
-		
+
 		$log_data = array(
 			'post_title' 	=> $title,
 			'post_content'	=> $message,

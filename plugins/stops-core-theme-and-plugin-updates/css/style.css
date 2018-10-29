@@ -218,10 +218,10 @@ input[type=email].eum-input-email {
 .theme-title strong {
   display: block; }
 
-.eum-plugin-name-actions {
+.eum-plugins-name-actions {
   margin-left: 70px; }
 
-.eum-theme-name-actions {
+.eum-themes-name-actions {
   margin-left: 100px; }
 
 body .plugins .active td,
@@ -236,3 +236,37 @@ body .plugins .inactive th.check-column {
 
 #footer-thankyou img {
   max-width: 100px; }
+
+#eum-save-settings {
+  padding: 20px 10px;
+  font-size: 24px;
+  width: 200px;
+  display: block;
+  margin: 0 auto;
+  height: 50px;
+  line-height: 13px; }
+
+#eum-save-settings-warning {
+  position: fixed;
+  right: 10px;
+  bottom: 30px;
+  width: auto;
+  display: none; }
+
+.warning {
+  color: #333;
+  padding: 5px;
+  border: 1px solid #F00;
+  background-color: #f0a5a4;
+  border-radius: 5px;
+  margin: 15px 0; }
+  .warning p {
+    margin: 0; }
+
+#result {
+  margin-top: 20px; }
+  #result .updated p {
+    font-weight: bold; }
+
+#logs-filter {
+  clear: left; }
