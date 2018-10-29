@@ -1,21 +1,21 @@
 		</div>
 
-		<?php $prefooter = (get_field('use_pre-footer',get_the_ID(),false) == 1?true:false); ?>
+		<?php // $prefooter = (get_field('use_pre-footer',get_the_ID(),false) == 1?true:false); ?>
 
-		<footer id="nu__global-footer" class="<?=($prefooter?'addprefooter ':'')?><?=(trim($_SERVER['REQUEST_URI']) === '/'?'collapse absolute':'')?>">
+		<footer id="nu__global-footer" class="">
 
 			<?php
 
-				if($prefooter){ get_template_part('loops/loop-prefooter'); }
+				//if($prefooter){ get_template_part('loops/loop-prefooter'); }
 			?>
 
 			<?php wp_footer(); ?>
 
 			<div class="nu__footer">
-				<div class="nu__footer-hideshow js_footer-hideshow" title="Click to show/hide the footer"></div>
+				<!-- <div class="nu__footer-hideshow js_footer-hideshow" title="Click to show/hide the footer"></div> -->
 				<div>
 
-					<?php get_template_part('loops/loop-footercampuses'); ?>
+					<?php // get_template_part('loops/loop-footercampuses'); ?>
 
 					<div>
                         <p>Coastal Sustainability Institute</p>
